@@ -1,5 +1,6 @@
 
 from jira import JIRA
+from .board import Board
 import requests
 import json
 import re

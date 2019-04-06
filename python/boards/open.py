@@ -1,5 +1,6 @@
 import vim
 import sys
+from ..common.connection import Connection
 # Assumes that the common file was imported in the vimscript
 
 domainName = vim.vars["jiraVimDomainName"].decode("utf-8")
@@ -16,6 +17,7 @@ vim.command("new")
 vim.command("set ft=jiraboardview")
 buf = vim.current.buffer
 buf[0] = boardName
+buf.append("="*len(boardName))
 buf.append("\n")
 buf.append(issues)
 vim.command("set noma")
