@@ -1,6 +1,7 @@
 
 from jira import JIRA
 from .board import Board
+from .kanbanBoard import KanbanBoard
 import requests
 import json
 import re
@@ -18,8 +19,8 @@ class Connection:
 
     def __buildBoardHash(self):
         boardHash = {}
-        reqStr = self.__baseUrl+"/rest/agile/1.0/board"
-        boardList = requests.get(reqStr, auth=(self.__email, self.__token)).json()
+        reqStr = "/rest/agile/1.0/board"
+        boardList = self.customRequest(reqStr).json()
         for v in boardList["values"]:
             bName = re.match(r"\A(\w+)\sboard\Z", v["name"]).group(1)
             boardHash[bName] = v
@@ -30,9 +31,14 @@ class Connection:
 
     def getBoard(self, boardName):
         if boardName in self.__boardHash:
-            return Board(str(self.__boardHash[boardName]["id"]), self)
+            boardType = self.__boardHash[boardName]["type"]
+            boardId = str(self.__boardHash[boardName]["id"])
+            if boardType == "type":
+                return Board(boardId, self)
+            else:
+                return KanbanBoard(boardId, self)
         else:
-            return None
+            return None 
 
     def customRequest(self, request):
         reqStr = self.__baseUrl + request
