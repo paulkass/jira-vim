@@ -27,11 +27,25 @@ buf = vim.current.buffer
 buf[0] = boardName + " BOARD"
 buf.append("="*( len(boardName)+7 ) )
 buf.append("")
-for col in issues:
-    buf.append(col[0].upper()+":")
-    buf.append("-"*( len(col[0])+1 ))
-    i = col[1]
-    buf.append(i)
-    buf.append("")
-vim.command("set nomodifiable")
+textWidth = vim.current.window.width
 
+# Print the issues by category
+for cat in issues:
+    buf.append(cat[0].upper()+":")
+    buf.append("-"*( len(cat[0])+1 ))
+    startLine = len(buf)+1
+    i = cat[1]
+    endLine = startLine + len(i)-1
+    maxKeyLen = 0
+    maxSummLen = 0
+    for key, summ in i:
+        if len(key) >= maxKeyLen:
+            maxKeyLen = len(key)
+        if len(summ) >= maxSummLen:
+            maxSummLen = len(summ)
+        buf.append(key + " " + summ)
+    vim.command("%d,%dTabularize /%s-\d\+\s/r0l%dr0" % ( startLine, endLine, boardName, textWidth-maxKeyLen-maxSummLen-7))
+    buf.append("")
+
+vim.command("normal! gg")
+vim.command("set nomodifiable")

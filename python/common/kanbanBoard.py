@@ -10,17 +10,16 @@ class KanbanBoard(Board):
         self.__statusToColumn = {}
         self.__columnIssues = {}
         for col in boardConf["columnConfig"]["columns"]:
-            #print(json.dumps(col, sort_keys=True, indent=4))
             cName = col["name"]
             self.__columnIssues[cName] = set()
             for s in col["statuses"]:
                 self.__statusToColumn[s["id"]] = cName
 
     def getIssues(self, startAt=0, maxResults=50):
-        r = self.connection.customRequest(self.baseUrl+"/issue?fields=key,status&startAt=%d&maxResults=%d" % (startAt, maxResults)).json()
+        r = self.connection.customRequest(self.baseUrl+"/issue?fields=%s&startAt=%d&maxResults=%d" % (','.join(self.requiredProperties), startAt, maxResults)).json()
         # Sort issues by Category
         for i in r["issues"]:
-            key = i["key"]
+            key = (i["key"], i["fields"]["summary"])
             statusId = i["fields"]["status"]["id"]
             self.__columnIssues[self.__statusToColumn[statusId]].add(key)
 
