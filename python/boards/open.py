@@ -15,13 +15,6 @@ issues = board.getIssues()
 
 # Buff Setup Commands
 vim.command("new")
-if isinstance(board, KanbanBoard):
-    filetype = "jirakanbanboardview"
-else:
-    filetype = "jiraboardview"
-vim.command("setl filetype=%s" % filetype)
-vim.command("setl buftype=nofile")
-vim.command("setl noswapfile")
 
 buf = vim.current.buffer
 buf[0] = boardName + " BOARD"
@@ -47,5 +40,8 @@ for cat in issues:
     vim.command("%d,%dTabularize /%s-\d\+\s/r0l%dr0" % ( startLine, endLine, boardName, textWidth-maxKeyLen-maxSummLen-7))
     buf.append("")
 
-vim.command("normal! gg")
-vim.command("set nomodifiable")
+if isinstance(board, KanbanBoard):
+    filetype = "jirakanbanboardview"
+else:
+    filetype = "jiraboardview"
+vim.command("setl filetype=%s" % filetype)
