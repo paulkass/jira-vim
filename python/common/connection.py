@@ -2,9 +2,11 @@
 from jira import JIRA
 from .board import Board
 from .kanbanBoard import KanbanBoard
+from .issue import Issue
 import requests
 import json
 import re
+import vim
 
 class Connection:
     def __init__(self, name, email, token):
@@ -29,6 +31,9 @@ class Connection:
     def getBaseUrl(self):
         return self.__baseUrl
 
+    def getJiraObject(self):
+        return self.__jira
+
     def getBoard(self, boardName):
         if boardName in self.__boardHash:
             boardType = self.__boardHash[boardName]["type"]
@@ -40,8 +45,17 @@ class Connection:
         else:
             return None 
 
+    def getIssue(self, issueKey):
+        return Issue(issueKey)         
+
     def customRequest(self, request):
         reqStr = self.__baseUrl + request
         return requests.get(reqStr, auth=(self.__email, self.__token))
 
-
+    @staticmethod
+    def getConnectionFromVars():
+        domainName = vim.vars["jiraVimDomainName"].decode("utf-8")
+        email = vim.vars["jiraVimEmail"].decode("utf-8")
+        token = vim.vars["jiraVimToken"].decode("utf-8")
+
+        return Connection(domainName, email, token)
