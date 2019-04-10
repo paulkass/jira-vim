@@ -47,6 +47,6 @@ def JiraVimBoardOpen(sessionStorage):
         vim.command("setl filetype=%s" % filetype)
     else:
         # Open the buffer in the current window
-        # TODO: Have a global variable control whether the issue is opened inthe current window or a check will happen if it's already opened
+        # TODO: Have a global variable control whether the issue is opened in the current window or a check will happen if it's already opened
         vim.command("buf "+str(buf.number))
          
