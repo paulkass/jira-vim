@@ -1,9 +1,10 @@
 import json
 
 class Board:
-    def __init__(self, boardId, connection):
+    def __init__(self, boardId, boardName, connection):
         self.connection = connection
         self.boardId = boardId
+        self.boardName = boardName
         self.baseUrl = "/rest/agile/1.0/board/"+boardId
         self.requiredProperties = ["key", "status", "summary"] 
 

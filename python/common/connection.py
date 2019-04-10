@@ -39,9 +39,9 @@ class Connection:
             boardType = self.__boardHash[boardName]["type"]
             boardId = str(self.__boardHash[boardName]["id"])
             if boardType == "type":
-                return Board(boardId, self)
+                return Board(boardId, boardName, self)
             else:
-                return KanbanBoard(boardId, self)
+                return KanbanBoard(boardId, boardName, self)
         else:
             return None 
 
@@ -51,11 +51,3 @@ class Connection:
     def customRequest(self, request):
         reqStr = self.__baseUrl + request
         return requests.get(reqStr, auth=(self.__email, self.__token))
-
-    @staticmethod
-    def getConnectionFromVars():
-        domainName = vim.vars["jiraVimDomainName"].decode("utf-8")
-        email = vim.vars["jiraVimEmail"].decode("utf-8")
-        token = vim.vars["jiraVimToken"].decode("utf-8")
-
-        return Connection(domainName, email, token)
