@@ -2,8 +2,8 @@ from .board import Board
 import json
 
 class KanbanBoard(Board):
-    def __init__(self, boardId, connection):
-        Board.__init__(self, boardId, connection)
+    def __init__(self, boardId, boardName, connection):
+        Board.__init__(self, boardId, boardName, connection)
         
         # Populate the status sets
         boardConf = self.connection.customRequest(self.baseUrl+"/configuration")  .json()
