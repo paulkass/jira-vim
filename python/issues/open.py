@@ -4,12 +4,16 @@ from ..common.connection import Connection
 from ..common.issue import Issue
 
 # Arguments are expected through sys.argv
-def JiraVimIssueOpen(sessionStorage):
+def JiraVimIssueOpen(sessionStorage, isSplit=False):
     issueKey = str(sys.argv[0])
     connection = sessionStorage.connection
     filetype = "jiraissueview"
 
     buf, new = sessionStorage.getBuff(objName=issueKey)
+    if isSplit:
+        vim.command("sbuffer "+str(buf.number))
+    else:
+        vim.command("buffer "+str(buf.number))
     if new:
         textWidth = vim.current.window.width
         issue = Issue(issueKey, connection)
@@ -33,6 +37,4 @@ def JiraVimIssueOpen(sessionStorage):
         buf.append("")
         
         vim.command("setl filetype=%s" % filetype)
-    else:
-        # Open the buffer in the current window
-        vim.command("buf "+str(buf.number))
+

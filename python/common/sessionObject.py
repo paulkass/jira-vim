@@ -36,7 +36,7 @@ class SessionObject():
             return None
 
     # Returns the buffer, and a boolean that says whether the buffer is newly created or existing one
-    def getBuff(self, objId=None, objName=None) :
+    def getBuff(self, objId=None, objName=None, isSplit=False):
         if objId is not None:
             buff = self.getBufferById(objId)
             if buff is not None:
@@ -49,6 +49,9 @@ class SessionObject():
         return (self.createBuffer(), True)
 
     def createBuffer(self):
+        # Creates a new buffer, saves it, and then uses the hidden command to hide it
         vim.command("new")
-        return vim.current.buffer
+        buf = vim.current.buffer
+        vim.command("hide")
+        return buf
 
