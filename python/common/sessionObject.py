@@ -25,7 +25,7 @@ class SessionObject():
         self.__bufferHash[issue.id] = buff
         self.__namesToIds[issue.issueKey] = issue.id
 
-    def getBufferById(self, key):
+    def getBufferByIndex(self, key):
         if key in self.__bufferHash:
             buff = self.__bufferHash[key]
             return buff if buff.valid else None
@@ -38,11 +38,11 @@ class SessionObject():
     # Returns the buffer, and a boolean that says whether the buffer is newly created or existing one
     def getBuff(self, objId=None, objName=None, isSplit=False):
         if objId is not None:
-            buff = self.getBufferById(objId)
+            buff = self.getBufferByIndex(objId)
             if buff is not None:
                 return ( buff, False )
         if objName is not None:
-            buff = self.getBufferById(objName)
+            buff = self.getBufferByIndex(objName)
             if buff is not None:
                 return ( buff, False )
         # return new buffer
