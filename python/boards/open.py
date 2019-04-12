@@ -1,13 +1,11 @@
 import vim
 import sys
-from ..common.connection import Connection
 from ..common.kanbanBoard import KanbanBoard
 
-
 # arguments expected in sys.argv
-def JiraVimBoardOpen(sessionStorage):
-    boardName = str( sys.argv[0]) 
-    connection = sessionStorage.connection 
+def JiraVimBoardOpen(sessionStorage, isSplit=True):
+    boardName = str(sys.argv[0]) 
+    connection = sessionStorage.connection
     board = connection.getBoard(boardName)
     issues = board.getIssues()
 
@@ -18,6 +16,10 @@ def JiraVimBoardOpen(sessionStorage):
 
     # Buff Setup Commands
     buf, new = sessionStorage.getBuff(objName=boardName)
+    if isSplit:
+        vim.command("sbuffer "+str(buf.number))
+    else:
+        vim.command("buffer "+str(buf.number))
     if new:
         sessionStorage.assignBoard(board, buf)
         buf[0] = boardName + " BOARD"
@@ -45,8 +47,3 @@ def JiraVimBoardOpen(sessionStorage):
             
 
         vim.command("setl filetype=%s" % filetype)
-    else:
-        # Open the buffer in the current window
-        # TODO: Have a global variable control whether the issue is opened in the current window or a check will happen if it's already opened
-        vim.command("buf "+str(buf.number))
-         

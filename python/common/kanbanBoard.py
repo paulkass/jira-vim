@@ -1,5 +1,4 @@
 from .board import Board
-import json
 
 class KanbanBoard(Board):
     def __init__(self, boardId, boardName, connection):
@@ -24,4 +23,3 @@ class KanbanBoard(Board):
             self.__columnIssues[self.__statusToColumn[statusId]].add(key)
 
         return [( a, list(b) ) for a,b in self.__columnIssues.items() if len(b) > 0]
-        
