@@ -23,14 +23,14 @@ def JiraVimBoardOpen(sessionStorage, isSplit=True):
     if new:
         sessionStorage.assignBoard(board, buf)
         buf[0] = boardName + " BOARD"
-        buf.append("="*( len(boardName)+7 ) )
+        buf.append("="*(len(boardName)+7))
         buf.append("")
         textWidth = vim.current.window.width
 
         # Print the issues by category
         for cat in issues:
             buf.append(cat[0].upper()+":")
-            buf.append("-"*( len(cat[0])+1 ))
+            buf.append("-"*(len(cat[0])+1))
             startLine = len(buf)+1
             i = cat[1]
             endLine = startLine + len(i)-1
@@ -42,7 +42,8 @@ def JiraVimBoardOpen(sessionStorage, isSplit=True):
                 if len(summ) >= maxSummLen:
                     maxSummLen = len(summ)
                 buf.append(key + " " + summ)
-            vim.command("%d,%dTabularize /\\u\+-\d\+\s/r0l%dr0" % ( startLine, endLine, textWidth-maxKeyLen-maxSummLen-7))
+            vim.command("%d,%dTabularize /\\u\+-\d\+\s/r0l%dr0" % (startLine,\
+                   endLine, textWidth-maxKeyLen-maxSummLen-7))
             buf.append("")
 
         vim.command("setl filetype=%s" % filetype)

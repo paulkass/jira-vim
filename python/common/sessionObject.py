@@ -6,7 +6,8 @@ class SessionObject():
     def __init__(self):
         self.connection = SessionObject.getConnectionFromVars()
 
-        # When retrieving buffers, we need to make sure that the buffer is valid. If the buffer is cleared or wiped, it will be marked invalid and we can't retriev it again.
+        # When retrieving buffers, we need to make sure that the buffer is valid. 
+        #If the buffer is cleared or wiped, it will be marked invalid and we can't retriev it again.
         self.__bufferHash = {}
         self.__namesToIds = {}
 
@@ -45,7 +46,7 @@ class SessionObject():
         if objName is not None:
             buff = self.getBufferByIndex(objName)
             if buff is not None:
-                return ( buff, False )
+                return (buff, False)
         # return new buffer
         return (self.__createBuffer(), True)
 

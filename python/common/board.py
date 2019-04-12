@@ -8,6 +8,7 @@ class Board:
         self.requiredProperties = ["key", "status", "summary"]
 
     def getIssues(self, startAt=0, maxResults=50):
-        r = self.connection.customRequest(self.baseUrl+"/issue?fields=%s&startAt=%d&maxResults=%d" % (','.join(self.requiredProperties), startAt, maxResults)).json()
+        r = self.connection.customRequest(self.baseUrl+"/issue?fields=%s&startAt=%d&maxResults=%d" % (','.join(self.requiredProperties), \
+                startAt, maxResults)).json()
         return [("All Issues", [i["key"] for i in r["issues"]])]
 
