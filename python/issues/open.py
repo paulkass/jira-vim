@@ -34,5 +34,5 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
         
         buf.append("Description: %s" % description)
         buf.append("")
-        
+
         vim.command("setl filetype=%s" % filetype)

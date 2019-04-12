@@ -44,6 +44,5 @@ def JiraVimBoardOpen(sessionStorage, isSplit=True):
                 buf.append(key + " " + summ)
             vim.command("%d,%dTabularize /\\u\+-\d\+\s/r0l%dr0" % ( startLine, endLine, textWidth-maxKeyLen-maxSummLen-7))
             buf.append("")
-            
 
         vim.command("setl filetype=%s" % filetype)
