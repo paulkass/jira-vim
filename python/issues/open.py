@@ -1,6 +1,5 @@
 import vim
 import sys
-from ..common.connection import Connection
 from ..common.issue import Issue
 
 # Arguments are expected through sys.argv
@@ -30,11 +29,10 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
         buf.append("="*len(issueKey))
         buf.append("")
 
-        buf.append("Summary: %s" % summary) 
+        buf.append("Summary: %s" % summary)
         buf.append("")
         
         buf.append("Description: %s" % description)
         buf.append("")
         
         vim.command("setl filetype=%s" % filetype)
-

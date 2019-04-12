@@ -1,5 +1,3 @@
-import json
-from jira import JIRA
 
 class Issue:
     def __init__(self, issueKey, connection):

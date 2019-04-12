@@ -4,9 +4,7 @@ from .board import Board
 from .kanbanBoard import KanbanBoard
 from .issue import Issue
 import requests
-import json
 import re
-import vim
 
 class Connection:
     def __init__(self, name, email, token):
@@ -43,10 +41,10 @@ class Connection:
             else:
                 return KanbanBoard(boardId, boardName, self)
         else:
-            return None 
+            return None
 
     def getIssue(self, issueKey):
-        return Issue(issueKey)         
+        return Issue(issueKey, self)
 
     def customRequest(self, request):
         reqStr = self.__baseUrl + request

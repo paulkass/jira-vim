@@ -4,13 +4,14 @@ import vim
 
 class SessionObject():
     def __init__(self):
-        self.connection = self.getConnectionFromVars()
+        self.connection = SessionObject.getConnectionFromVars()
 
         # When retrieving buffers, we need to make sure that the buffer is valid. If the buffer is cleared or wiped, it will be marked invalid and we can't retriev it again.
         self.__bufferHash = {}
         self.__namesToIds = {}
 
-    def getConnectionFromVars(self):
+    @staticmethod
+    def getConnectionFromVars():
         domainName = vim.vars["jiraVimDomainName"].decode("utf-8")
         email = vim.vars["jiraVimEmail"].decode("utf-8")
         token = vim.vars["jiraVimToken"].decode("utf-8")
@@ -30,7 +31,7 @@ class SessionObject():
             buff = self.__bufferHash[key]
             return buff if buff.valid else None
         elif key in self.__namesToIds:
-            buff = self.__bufferHash[self.__namesToIds[key]] 
+            buff = self.__bufferHash[self.__namesToIds[key]]
             return buff if buff.valid else None
         else:
             return None
@@ -46,9 +47,9 @@ class SessionObject():
             if buff is not None:
                 return ( buff, False )
         # return new buffer
-        return (self.createBuffer(), True)
+        return (self.__createBuffer(), True)
 
-    def createBuffer(self):
+    def __createBuffer(self):
         # Creates a new buffer, saves it, and then uses the hidden command to hide it
         vim.command("new")
         buf = vim.current.buffer

@@ -1,12 +1,11 @@
 import vim
 import sys
-from ..common.connection import Connection
 from ..common.kanbanBoard import KanbanBoard
 
 # arguments expected in sys.argv
 def JiraVimBoardOpen(sessionStorage, isSplit=True):
-    boardName = str( sys.argv[0]) 
-    connection = sessionStorage.connection 
+    boardName = str(sys.argv[0]) 
+    connection = sessionStorage.connection
     board = connection.getBoard(boardName)
     issues = board.getIssues()
 
@@ -48,4 +47,3 @@ def JiraVimBoardOpen(sessionStorage, isSplit=True):
             
 
         vim.command("setl filetype=%s" % filetype)
-
