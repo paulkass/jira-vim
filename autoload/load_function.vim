@@ -8,7 +8,4 @@ python3 << EOF
 sessionStorage = SessionObject()
 EOF
 
-    " Import all scripts with functions here
-    python3 import python.boards.open
-    python3 import python.issues.open
 endfunction
