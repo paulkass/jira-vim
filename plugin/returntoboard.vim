@@ -1,0 +1,9 @@
+
+function! JiraVimReturnToBoard(funcname)
+    let s:boardName = substitute(matchstr(getline("1"), '\v^\s?\u+-'), '\v[\s-]+', '', 'g')
+    if s:boardName != ""
+        let s:Func = function(a:funcname, [s:boardName])
+        call s:Func()
+    else
+    endif
+endfunction
