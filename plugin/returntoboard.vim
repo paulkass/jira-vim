@@ -5,5 +5,6 @@ function! JiraVimReturnToBoard(funcname)
         let s:Func = function(a:funcname, [s:boardName])
         call s:Func()
     else
+        throw "Could not find board name in the first row. Please sure the file is properly formatted" 
     endif
 endfunction
