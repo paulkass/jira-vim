@@ -22,7 +22,7 @@ class Connection:
         reqStr = "/rest/agile/1.0/board"
         boardList = self.customRequest(reqStr).json()
         for v in boardList["values"]:
-            bName = re.match(r"\A(\w+)\sboard\Z", v["name"]).group(1)
+            bName = re.match(r"\A([\s\w]+)\sboard\Z", v["name"]).group(1)
             boardHash[bName] = v
         self.__boardHash = boardHash
 

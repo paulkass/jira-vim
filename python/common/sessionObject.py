@@ -7,7 +7,7 @@ class SessionObject():
         self.connection = SessionObject.getConnectionFromVars()
 
         # When retrieving buffers, we need to make sure that the buffer is valid. 
-        #If the buffer is cleared or wiped, it will be marked invalid and we can't retriev it again.
+        #If the buffer is cleared or wiped, it will be marked invalid and we can't retrieve it again.
         self.__bufferHash = {}
         self.__namesToIds = {}
 
@@ -38,7 +38,7 @@ class SessionObject():
             return None
 
     # Returns the buffer, and a boolean that says whether the buffer is newly created or existing one
-    def getBuff(self, objId=None, objName=None, isSplit=False):
+    def getBuff(self, objId=None, objName=None, createNew=True, isSplit=False):
         if objId is not None:
             buff = self.getBufferByIndex(objId)
             if buff is not None:
@@ -48,7 +48,10 @@ class SessionObject():
             if buff is not None:
                 return (buff, False)
         # return new buffer
-        return (self.__createBuffer(), True)
+        if createNew:
+            return (self.__createBuffer(), True)
+        else:
+            return (None, False)
 
     def __createBuffer(self):
         # Creates a new buffer, saves it, and then uses the hidden command to hide it

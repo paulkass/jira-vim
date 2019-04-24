@@ -1,9 +1,12 @@
 function! JiraVimBoardIssueSelect(funcname)
-    let s:line = getline(line("."))
-    let s:issueMatch = substitute(matchstr(s:line, '\v\u+-\d+\s'), '\s$', '', '')
-    if s:issueMatch != ""
-        let Func = function(a:funcname, [s:issueMatch])
-        call Func()
+    let l:line = getline(line("."))
+    let l:boardName = b:jiraVimBoardName
+    let l:issueMatch = substitute(matchstr(l:line, '\v\u+-\d+\s'), '\s$', '', '')
+    if l:issueMatch != ""
+        let l:Func = function(a:funcname, [l:issueMatch])
+        call l:Func()
+        " Now in the issue buffer
+        let b:jiraVimBoardName = l:boardName
     endif
 endfunction
 

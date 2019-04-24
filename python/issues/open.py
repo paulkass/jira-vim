@@ -7,12 +7,18 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
     issueKey = str(sys.argv[0])
     connection = sessionStorage.connection
     filetype = "jiraissueview"
+    # Carry on the board name from the previous buffer
+    if vim.eval("exists(\"b:jiraVimBoardName\")"):
+        boardName = vim.eval("b:jiraVimBoardName")
 
     buf, new = sessionStorage.getBuff(objName=issueKey)
     if isSplit:
         vim.command("sbuffer "+str(buf.number))
     else:
         vim.command("buffer "+str(buf.number))
+    if 'boardName' in locals():
+        vim.command("let b:jiraVimBoardName = \"%s\"" % boardName)
+
     if new:
         textWidth = vim.current.window.width
         issue = Issue(issueKey, connection)
