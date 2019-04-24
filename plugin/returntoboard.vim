@@ -1,6 +1,6 @@
 
 function! JiraVimBoardReturn(funcname)
-    if exists("b:jiraVimBoardName") && b:jiraVimBoardName !=# ""
+    if exists("b:jiraVimBoardName") && b:jiraVimBoardName !=? ""
         let l:Func = function(a:funcname, [b:jiraVimBoardName])
         call l:Func()
     else
