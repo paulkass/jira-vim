@@ -6,13 +6,6 @@ from ..common.kanbanBoard import KanbanBoard
 def JiraVimBoardOpen(sessionStorage, isSplit=True):
     boardName = str(sys.argv[0]) 
     connection = sessionStorage.connection
-    board = connection.getBoard(boardName)
-    issues = board.getIssues()
-
-    if isinstance(board, KanbanBoard):
-        filetype = "jirakanbanboardview"
-    else:
-        filetype = "jiraboardview"
 
     # Buff Setup Commands
     buf, new = sessionStorage.getBuff(objName=boardName)
@@ -20,9 +13,18 @@ def JiraVimBoardOpen(sessionStorage, isSplit=True):
         vim.command("sbuffer "+str(buf.number))
     else:
         vim.command("buffer "+str(buf.number))
+    vim.command("let b:jiraVimBoardName = \"%s\"" % boardName)
     if new:
+        board = connection.getBoard(boardName)
+        issues = board.getIssues()
+
+        if isinstance(board, KanbanBoard):
+            filetype = "jirakanbanboardview"
+        else:
+            filetype = "jiraboardview"
+
         sessionStorage.assignBoard(board, buf)
-        buf[0] = boardName + " BOARD"
+        buf[0] = boardName + " board"
         buf.append("="*(len(boardName)+7))
         buf.append("")
         textWidth = vim.current.window.width
