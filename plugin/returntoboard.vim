@@ -1,5 +1,6 @@
 
 function! JiraVimBoardReturn(funcname)
+    call check#CheckStorageSession()
     if exists("b:jiraVimBoardName") && b:jiraVimBoardName !=? ""
         let l:Func = function(a:funcname, [b:jiraVimBoardName])
         call l:Func()
