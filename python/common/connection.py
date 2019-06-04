@@ -2,6 +2,7 @@
 from jira import JIRA
 from .board import Board
 from .kanbanBoard import KanbanBoard
+from .scrumBoard import ScrumBoard
 from .issue import Issue
 import requests
 import re
@@ -36,10 +37,12 @@ class Connection:
         if boardName in self.__boardHash:
             boardType = self.__boardHash[boardName]["type"]
             boardId = str(self.__boardHash[boardName]["id"])
-            if boardType == "type":
-                return Board(boardId, boardName, self)
-            else:
+            if boardType == "kanban":
                 return KanbanBoard(boardId, boardName, self)
+            elif boardType == "scrum":
+                return ScrumBoard(boardId, boardName, self)
+            else:
+                return Board(boardId, boardName, self)
         else:
             return None
 

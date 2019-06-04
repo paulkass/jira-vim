@@ -20,8 +20,8 @@ class SessionObject():
         return Connection(domainName, email, token)
 
     def assignBoard(self, board, buff):
-        self.__bufferHash[board.boardId] = buff
-        self.__namesToIds[board.boardName] = board.boardId
+        self.__bufferHash[board.id] = buff
+        self.__namesToIds[board.boardName] = board.id
 
     def assignIssue(self, issue, buff):
         self.__bufferHash[issue.id] = buff
