@@ -24,11 +24,11 @@ def drawObject(buf, obj, name, sessionStorage):
         formatter = ISSUE_FORMATTER
         postfix = "board"
         sessionStorage.assignBoard(obj, buf)
-    elif isinstance(obj, ScrumBoard): 
+    elif isinstance(obj, ScrumBoard):
         filetype = "jirascrumboardview"
         itemExtractor = lambda b: b.getSprints()
         # dud function
-        formatter = lambda a,b,c,d,e: a 
+        formatter = lambda a, b, c, d, e: a
         postfix = "board"
         sessionStorage.assignBoard(obj, buf)
     elif isinstance(obj, Sprint):
@@ -45,7 +45,7 @@ def drawObject(buf, obj, name, sessionStorage):
 
     items = itemExtractor(obj)
 
-    buf[0] = name + ( " %s" % postfix)
+    buf[0] = name + (" %s" % postfix)
     buf.append("="*(len(name)+7))
     buf.append("")
 

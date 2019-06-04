@@ -1,8 +1,8 @@
 from ..util.itemCategorizer import ItemCategorizer
 
-class Sprint(ItemCategorizer):
-    def __init__(self, id, url, board, connection, state=None, name=None, startDate=None, endDate=None):
-        self.id = id
+class Sprint():
+    def __init__(self, sprintId, url, board, connection, state=None, name=None, startDate=None, endDate=None):
+        self.sprintId = sprintId
         self.__url = url
         self.board = board
         self.name = name
@@ -17,4 +17,4 @@ class Sprint(ItemCategorizer):
     def getIssues(self, startAt=0, maxResults=50):
         r = self.connection.customRequest(self.baseUrl+"/issue?fields=%s&startAt=%d&maxResults=%d" % (','.join(self.requiredProperties), startAt, maxResults)).json()
 
-        return self.issueCategorizer(r["issues"], self.board.statusToColumn, self.__columnToIssues)
+        return ItemCategorizer.issueCategorizer(r["issues"], self.board.statusToColumn, self.__columnToIssues)

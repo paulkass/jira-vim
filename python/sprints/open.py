@@ -1,6 +1,5 @@
 import sys
 import vim
-from ..common.scrumBoard import ScrumBoard
 from ..util.drawObject import drawObject
 
 def JiraVimSprintOpen(sessionStorage, isSplit=True):
@@ -12,11 +11,10 @@ def JiraVimSprintOpen(sessionStorage, isSplit=True):
 
     if boardName is not None:
         board = connection.getBoard(boardName)
-        buf, new = sessionStorage.getBuff(objName=sprintName)
+        buf, _ = sessionStorage.getBuff(objName=sprintName)
         if isSplit:
             vim.command("sbuffer "+str(buf.number))
         else:
             vim.command("buffer "+str(buf.number))
         vim.command("let b:jiraVimBoardName = \"%s\"" % boardName)
-        assert isinstance(board, ScrumBoard)
         drawObject(buf, board.getSprint(sprintName), sprintName, sessionStorage)
