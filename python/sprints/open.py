@@ -1,6 +1,6 @@
 import sys
 import vim
-from ..util.drawObject import drawObject
+from ..util.drawUtil import DrawUtil
 
 def JiraVimSprintOpen(sessionStorage, isSplit=True):
     sprintName = str(sys.argv[0])
@@ -17,4 +17,8 @@ def JiraVimSprintOpen(sessionStorage, isSplit=True):
         else:
             vim.command("buffer "+str(buf.number))
         vim.command("let b:jiraVimBoardName = \"%s\"" % boardName)
-        drawObject(buf, board.getSprint(sprintName), sprintName, sessionStorage)
+
+        sprint = board.getSprint(sprintName)
+        DrawUtil.draw_header(buf, sprint, sprintName)
+        DrawUtil.draw_items(buf, sprint, sessionStorage)
+        DrawUtil.set_filetype(sprint)

@@ -1,6 +1,6 @@
 import sys
 import vim
-from ..util.drawObject import drawObject
+from ..util.drawUtil import DrawUtil
 
 # arguments expected in sys.argv
 def JiraVimBoardOpen(sessionStorage, isSplit=True):
@@ -16,4 +16,6 @@ def JiraVimBoardOpen(sessionStorage, isSplit=True):
     vim.command("let b:jiraVimBoardName = \"%s\"" % boardName)
     if new:
         board = connection.getBoard(boardName)
-        drawObject(buf, board, boardName, sessionStorage)
+        DrawUtil.draw_header(buf, board, boardName)
+        DrawUtil.draw_items(buf, board, sessionStorage)
+        DrawUtil.set_filetype(board)

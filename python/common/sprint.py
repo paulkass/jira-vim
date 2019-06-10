@@ -9,12 +9,13 @@ class Sprint():
         self.__state = state
         self.__startDate = startDate
         self.__endDate = endDate
-        self.baseUrl = "/rest/agile/1.0/board/"+str(board.id)+"/sprint/"+str(id)
+        self.baseUrl = "/rest/agile/1.0/board/"+str(board.id)+"/sprint/"+str(sprintId)
         self.connection = connection
         self.requiredProperties = ["key", "status", "summary"]
         self.__columnToIssues = {}
 
     def getIssues(self, startAt=0, maxResults=50):
-        r = self.connection.customRequest(self.baseUrl+"/issue?fields=%s&startAt=%d&maxResults=%d" % (','.join(self.requiredProperties), startAt, maxResults)).json()
+        request_text = self.baseUrl+"/issue?fields=%s&startAt=%d&maxResults=%d" % (','.join(self.requiredProperties), startAt, maxResults)
+        r = self.connection.customRequest(request_text).json()
 
         return ItemCategorizer.issueCategorizer(r["issues"], self.board.statusToColumn, self.__columnToIssues)
