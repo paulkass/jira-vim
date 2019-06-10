@@ -1,4 +1,6 @@
 
+from ..util.itemExtractor import ItemExtractor
+
 class Board:
     def __init__(self, boardId, boardName, connection):
         self.connection = connection
@@ -17,7 +19,8 @@ class Board:
             for s in col["statuses"]:
                 self.statusToColumn[s["id"]] = cName
 
-    def getIssues(self, startAt=0, maxResults=50):
-        r = self.connection.customRequest(self.baseUrl+"/issue?fields=%s&startAt=%d&maxResults=%d" % (','.join(self.requiredProperties), \
-                startAt, maxResults)).json()
+        self.issueExtractor = ItemExtractor(self.connection, self.baseUrl+"/issue?fields=%s", lambda: (','.join(self.requiredProperties),))
+
+    def getIssues(self, column=None):
+        r = self.issueExtractor.__next__()
         return [("All Issues", [(i["key"], "") for i in r["issues"]])]
