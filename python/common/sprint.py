@@ -1,4 +1,5 @@
 from ..util.itemCategorizer import ItemCategorizer
+from ..util.itemExtractor import ItemExtractor
 
 class Sprint():
     def __init__(self, sprintId, url, board, connection, state=None, name=None, startDate=None, endDate=None):
@@ -14,8 +15,9 @@ class Sprint():
         self.requiredProperties = ["key", "status", "summary"]
         self.__columnToIssues = {}
 
-    def getIssues(self, startAt=0, maxResults=50):
-        request_text = self.baseUrl+"/issue?fields=%s&startAt=%d&maxResults=%d" % (','.join(self.requiredProperties), startAt, maxResults)
-        r = self.connection.customRequest(request_text).json()
+        self.issueExtractor = ItemExtractor(self.connection, self.baseUrl+"/issue?fields=%s", lambda: (','.join(self.requiredProperties),))
+
+    def getIssues(self, column=None):
+        r = self.issueExtractor.__next__()
 
         return ItemCategorizer.issueCategorizer(r["issues"], self.board.statusToColumn, self.__columnToIssues)
