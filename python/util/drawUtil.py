@@ -84,81 +84,81 @@ class DrawUtil():
             )
 
         buf[0] = name + (" %s" % postfix)
-            buf.append("="*(len(name)+7))
-            buf.append("")
+        buf.append("="*(len(name)+7))
+        buf.append("")
 
-        @staticmethod
-        def draw_item(buf, item, line=None):
-            """
-            Draws an item in the buffer.
+    @staticmethod
+    def draw_item(buf, item, line=None):
+        """
+        Draws an item in the buffer.
 
-            Draws an item on the specified line or at the end of the buffer if no line is specified. Does not apply formatting: formatting is applied when drawing a category.
+        Draws an item on the specified line or at the end of the buffer if no line is specified. Does not apply formatting: formatting is applied when drawing a category.
 
-            Parameters
-            ----------
-            buf : vim.buffer
-                Buffer to be drawn onto
-            item : tuple
-                Tuple that contains the key and summary of the item
-            line : int (Optional)
-                Line on which to draw the item. If not specified, appends to the end of the buffer
+        Parameters
+        ----------
+        buf : vim.buffer
+            Buffer to be drawn onto
+        item : tuple
+            Tuple that contains the key and summary of the item
+        line : int (Optional)
+            Line on which to draw the item. If not specified, appends to the end of the buffer
 
-            Returns
-            -------
-            tuple
-                the length of the key and the length of the summary as a tuple
+        Returns
+        -------
+        tuple
+            the length of the key and the length of the summary as a tuple
 
-            """
+        """
 
-            key, summ = item
-            buf.append(key + " " + summ, len(buf)-1 if not line else line-1)
-            return len(key), len(summ)
+        key, summ = item
+        buf.append(key + " " + summ, len(buf)-1 if not line else line-1)
+        return len(key), len(summ)
 
-        @staticmethod
-        def draw_category(buf, obj, category, line=None, formatter=None):
-            """
-            Draws a category in the buffer.
+    @staticmethod
+    def draw_category(buf, obj, category, line=None, formatter=None):
+        """
+        Draws a category in the buffer.
 
-            Gets a category and draws it in the buffer at the specified line. Also applies formatting afterwards.
+        Gets a category and draws it in the buffer at the specified line. Also applies formatting afterwards.
 
-            Parameters
-            ----------
-            buf : vim.buffer
-                Buffer to be drawn onto
-            obj : Object
-                Object to be examined
-            category : tuple
-                Tuple that contains the name of the category and a list of issues
-            line : int (Optional)
-                Line to be drawn onto (0-indexed). If none exist, defaults to appending to the file.
-            formatter : Lambda (Optional)
-                Lambda that accepts 5 arguments (
-                    startLine,
-                    endLine,
-                    maxKeyLen,
-                    maxSummLen,
-                    window_width
-                    )
-                The values of the variables should be self-explanatory. If not defined, it's chosen depending on the type of object, dud function for scrum boards and DrawUtil.ISSUE_FORMATTER otherwise.
-
-            Returns
-            -------
-            int
-                the line number of the blank line under the last item in the category
-
-            """
-
-            window_width = vim.current.window.width
-
-            # No formatting for the scrum board
-            formatter = formatter if formatter else DrawUtil.__type_selector(
-                obj=obj,
-                scrum=lambda a, b, c, d, e: a,
-                default=DrawUtil.ISSUE_FORMATTER
+        Parameters
+        ----------
+        buf : vim.buffer
+            Buffer to be drawn onto
+        obj : Object
+            Object to be examined
+        category : tuple
+            Tuple that contains the name of the category and a list of issues
+        line : int (Optional)
+            Line to be drawn onto (0-indexed). If none exist, defaults to appending to the file.
+        formatter : Lambda (Optional)
+            Lambda that accepts 5 arguments (
+                startLine,
+                endLine,
+                maxKeyLen,
+                maxSummLen,
+                window_width
                 )
+            The values of the variables should be self-explanatory. If not defined, it's chosen depending on the type of object, dud function for scrum boards and DrawUtil.ISSUE_FORMATTER otherwise.
 
-            if not line:
-                line = len(buf)+1
+        Returns
+        -------
+        int
+            the line number of the blank line under the last item in the category
+
+        """
+
+        window_width = vim.current.window.width
+
+        # No formatting for the scrum board
+        formatter = formatter if formatter else DrawUtil.__type_selector(
+            obj=obj,
+            scrum=lambda a, b, c, d, e: a,
+            default=DrawUtil.ISSUE_FORMATTER
+            )
+
+        if not line:
+            line = len(buf)+1
 
         buf.append(category[0].upper()+":", line-1)
         line += 1
