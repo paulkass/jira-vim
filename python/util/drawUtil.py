@@ -117,7 +117,7 @@ class DrawUtil():
         return len(key), len(summ)
 
     @staticmethod
-    def draw_category(buf, obj, category, line=None, formatter=None):
+    def draw_category(buf, obj, category, line=None, more=False, formatter=None):
         """
         Draws a category in the buffer.
 
@@ -133,6 +133,8 @@ class DrawUtil():
             Tuple that contains the name of the category and a list of issues
         line : int (Optional)
             Line to be drawn onto (0-indexed). If none exist, defaults to appending to the file.
+        more : Boolean (Optional)
+            Boolean that determines whether a MORE is displayed at the bottom of the items. Defaults to False.
         formatter : Lambda (Optional)
             Lambda that accepts 5 arguments (
                 startLine,
@@ -178,6 +180,9 @@ class DrawUtil():
             maxSummLen = max([lenSumm, maxSummLen])
         endLine = line-1
 
+        if more:
+            line = DrawUtil.draw_more(buf, line)
+
         # append an empty line at the end
         buf.append("", line-1)
 
@@ -202,7 +207,7 @@ class DrawUtil():
         line : int (Optional)
             Line on which to start drawing. If not defined, appends to the end of the buffer
         itemExtractor : Lambda (Optional)
-            Lambda that accepts an object and returns a list of items separated by category. If not defined, defaults to calling the getIssues method of the object.
+            Lambda that accepts an object and returns a list of items separated by category. If not defined, defaults to calling the getIssues method of the object. Can also return a tuple where the first element is the list of items, and the second is a boolean that represents whether there are more elements.
 
         Returns
         -------
@@ -230,11 +235,39 @@ class DrawUtil():
             obj=obj
             )(obj, buf)
 
-        items = itemExtractor(obj)
+        extraction = itemExtractor(obj)
+
+        if type(extraction) is tuple:
+            items, more = extraction
+        else:
+            items = extraction
+            more = False
 
         for cat in items:
-            line = DrawUtil.draw_category(buf, obj, cat, line) + 1
+            line = DrawUtil.draw_category(buf, obj, cat, line, more=more) + 1
         return line
+
+    @staticmethod
+    def draw_more(buf, line):
+        """
+        Draws the "MORE" symbol for columns representing extracts that have not been fully consumed.
+
+        Parameters
+        ----------
+        buf : Buffer
+            Buffer to be drawn to
+        line : Integer
+            Line to be drawn on
+
+        Returns
+        -------
+        Integer
+            returns line + 1
+
+        """
+
+        buf.append("---MORE---", line-1)
+        return line+1
 
     @staticmethod
     def set_filetype(obj, filetype=None):

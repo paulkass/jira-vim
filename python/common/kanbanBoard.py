@@ -19,4 +19,4 @@ class KanbanBoard(Board):
         else:
             r = self.issueExtractor.__next__()
         # Sort issues by Category
-        return ItemCategorizer.issueCategorizer(r["issues"], self.statusToColumn)
+        return ItemCategorizer.issueCategorizer(r["issues"], self.statusToColumn), bool(column and not self.columnExtractors[column].finished)
