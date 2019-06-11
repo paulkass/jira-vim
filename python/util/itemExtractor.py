@@ -55,5 +55,33 @@ class ItemExtractor:
 
         request_string = (self.connection_string + "&startAt=%d&maxResults=%d") % (self.provider() + (self.start_at_marker, self.batch_size))
         resources_response = self.connection.customRequest(request_string).json()
+        #print(resources_response)
         self.start_at_marker = resources_response["startAt"]
         return resources_response
+
+    @staticmethod
+    def create_column_issue_extractor(board, column, batch_size=10):
+        """
+        Create an ItemExtractor that extracts only items from one column.
+
+        Create an ItemExtractor that creates an extractor only for statuses associated with a specific column of a board.
+
+        Parameters
+        ----------
+        board : Board
+            The board object from which we are extracting the issues
+        column : String
+            The column name of the column to be extracted
+        batch_size : Integer (Optional)
+            Optional batch size
+
+        Returns
+        -------
+        ItemExtractor
+            ItemExtractor instance that gets issues from this particular column
+
+        """
+
+        #print([k for k, v in board.statusToColumn.items() if v == column])
+        return ItemExtractor(board.connection, board.baseUrl+"/issue?fields=%s&jql=status IN (%s)", lambda: (','.join(board.requiredProperties), ','.join(['\'%s\'' % k for k, v in board.statusToColumn.items() if v == column])), batch_size)
+

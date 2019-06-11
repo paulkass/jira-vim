@@ -1,6 +1,7 @@
 import sys
 import vim
 from ..util.drawUtil import DrawUtil
+from ..common.kanbanBoard import KanbanBoard
 
 # arguments expected in sys.argv
 def JiraVimBoardOpen(sessionStorage, isSplit=True):
@@ -16,6 +17,11 @@ def JiraVimBoardOpen(sessionStorage, isSplit=True):
     vim.command("let b:jiraVimBoardName = \"%s\"" % boardName)
     if new:
         board = connection.getBoard(boardName)
-        DrawUtil.draw_header(buf, board, boardName)
-        DrawUtil.draw_items(buf, board, sessionStorage)
+        line = DrawUtil.draw_header(buf, board, boardName)
+        if isinstance(board, KanbanBoard):
+            # Need to account for columns
+            for col in board.columns:
+                line = DrawUtil.draw_items(buf, board, sessionStorage, itemExtractor=lambda b, col_name=col: b.getIssues(column=col_name))
+        else:
+            DrawUtil.draw_items(buf, board, sessionStorage)
         DrawUtil.set_filetype(board)

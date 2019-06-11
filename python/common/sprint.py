@@ -13,11 +13,10 @@ class Sprint():
         self.baseUrl = "/rest/agile/1.0/board/"+str(board.id)+"/sprint/"+str(sprintId)
         self.connection = connection
         self.requiredProperties = ["key", "status", "summary"]
-        self.__columnToIssues = {}
 
         self.issueExtractor = ItemExtractor(self.connection, self.baseUrl+"/issue?fields=%s", lambda: (','.join(self.requiredProperties),))
 
     def getIssues(self, column=None):
         r = self.issueExtractor.__next__()
 
-        return ItemCategorizer.issueCategorizer(r["issues"], self.board.statusToColumn, self.__columnToIssues)
+        return ItemCategorizer.issueCategorizer(r["issues"], self.board.statusToColumn)

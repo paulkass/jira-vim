@@ -73,7 +73,8 @@ class DrawUtil():
 
         Returns
         -------
-        Nothing
+        int
+            This represents the line number of the blank line under the header. Intended to be a constant since it's expected that this is written at the top of the file.
 
         """
 
@@ -86,6 +87,7 @@ class DrawUtil():
         buf[0] = name + (" %s" % postfix)
         buf.append("="*(len(name)+7))
         buf.append("")
+        return 3
 
     @staticmethod
     def draw_item(buf, item, line=None):
@@ -204,7 +206,8 @@ class DrawUtil():
 
         Returns
         -------
-        Nothing
+        int
+            the line number of the blank line under the last item in the category
 
         """
 
@@ -231,6 +234,7 @@ class DrawUtil():
 
         for cat in items:
             line = DrawUtil.draw_category(buf, obj, cat, line) + 1
+        return line
 
     @staticmethod
     def set_filetype(obj, filetype=None):

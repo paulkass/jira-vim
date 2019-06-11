@@ -2,7 +2,7 @@
 class ItemCategorizer():
 
     @staticmethod
-    def issueCategorizer(issues, statusToColumn, columnToIssues):
+    def issueCategorizer(issues, statusToColumn):
         """
         Categorizes issues based on category.
 
@@ -14,8 +14,6 @@ class ItemCategorizer():
             A json string containing an "issues" field that contains an array of issues to be processed.
         statusToColumn : Dict
             A dictionary that maps status to columns. This is a many to one relationship.
-        columnToIssues : Dict
-            A dictionary that maps column strings to sets of issue keys. This dictionary is written to by the method.
 
         Returns
         -------
@@ -24,6 +22,7 @@ class ItemCategorizer():
 
         """
 
+        columnToIssues = {}
         for i in issues:
             key = (i["key"], i["fields"]["summary"])
             statusId = i["fields"]["status"]["id"]

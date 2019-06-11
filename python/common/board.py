@@ -11,11 +11,14 @@ class Board:
 
         self.boardConf = self.connection.customRequest(self.baseUrl+"/configuration").json()
         self.statusToColumn = {}
+        self.columns = set()
+
         """
         The idea here is that each column can display many statuses. So the relationship from status to column is many to one. Then each instance sorts issues into columns on its own.
         """
         for col in self.boardConf["columnConfig"]["columns"]:
             cName = col["name"]
+            self.columns.add(cName)
             for s in col["statuses"]:
                 self.statusToColumn[s["id"]] = cName
 
@@ -23,4 +26,5 @@ class Board:
 
     def getIssues(self, column=None):
         r = self.issueExtractor.__next__()
-        return [("All Issues", [(i["key"], "") for i in r["issues"]])]
+        categoryName = "All Issues"
+        return [(categoryName, [(i["key"], "") for i in r["issues"]])]
