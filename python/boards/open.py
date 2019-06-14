@@ -16,7 +16,7 @@ def JiraVimBoardOpen(sessionStorage, isSplit=True):
         vim.command("buffer "+str(buf.number))
     vim.command("let b:jiraVimBoardName = \"%s\"" % boardName)
     if new:
-        board = connection.getBoard(boardName)
+        board = sessionStorage.getBoard(boardName)
         line = DrawUtil.draw_header(buf, board, boardName)
         if isinstance(board, KanbanBoard):
             # Need to account for columns

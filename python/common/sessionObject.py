@@ -1,15 +1,17 @@
-
-from .connection import Connection
 import vim
+from .connection import Connection
 
 class SessionObject():
     def __init__(self):
         self.connection = SessionObject.getConnectionFromVars()
 
-        # When retrieving buffers, we need to make sure that the buffer is valid. 
-        #If the buffer is cleared or wiped, it will be marked invalid and we can't retrieve it again.
+        # When retrieving buffers, we need to make sure that the buffer is valid.
+        # If the buffer is cleared or wiped, it will be marked invalid and we can't retrieve it again.
         self.__bufferHash = {}
         self.__namesToIds = {}
+
+        # Also cache board objects: this one maps buffer numbers to Board and Sprint objects
+        self.__boardsHash = {}
 
     @staticmethod
     def getConnectionFromVars():
@@ -20,8 +22,26 @@ class SessionObject():
         return Connection(domainName, email, token)
 
     def assignBoard(self, board, buff):
+        """
+        Assigns associations between a board and a buffer to the caches.
+
+        Parameters
+        ----------
+        board : Board or Sprint
+            Object to be associated with the buffer
+        buff : Vim Buffer
+            A vim buffer object to be associated with board
+
+        Returns
+        -------
+        Nothing
+
+        """
+
         self.__bufferHash[board.id] = buff
         self.__namesToIds[board.boardName] = board.id
+        self.__boardsHash[buff.number] = board
+        self.__boardsHash[board.boardName] = board
 
     def assignIssue(self, issue, buff):
         self.__bufferHash[issue.id] = buff
@@ -34,6 +54,39 @@ class SessionObject():
         elif key in self.__namesToIds:
             buff = self.__bufferHash[self.__namesToIds[key]]
             return buff if buff.valid else None
+        else:
+            return None
+
+    def getBoard(self, boardIdentifier):
+        """
+        Retrieve board object based on buffer number
+
+        This function takes in an identifier and tries to retrieve an object from the cache corresponding to the identifier (which can be a buffer id, a buffer, or a string of the board name). If it does not find a string object, it goes ahead and creates one by calling the getBoard method of the connection object. If it does not find a buffer number of buffer object in the cache, it creates one based on the jiraVimBoardName variable.
+
+        Parameters
+        ----------
+        buf : Integer or Buffer or String
+            Buffer object or integer representing the number of the buffer
+
+        Returns
+        -------
+        Board
+            Board corresponding to the buffer that was queried
+
+        """
+        create_new_object = self.connection.getBoard
+
+        if type(boardIdentifier) is int :
+            board = self.__boardsHash.get(boardIdentifier, create_new_object(vim.buffers[boardIdentifier].vars["jiraVimBoardName"]))
+            self.assignBoard(board, vim.buffer[boardIdentifier])
+            return board
+        elif type(boardIdentifier) is str:
+            board = self.__boardsHash.get(boardIdentifier, create_new_object(boardIdentifier))
+            return board
+        elif type(boardIdentifier) is vim.buffer:
+            board = self.__boardsHash.get(boardIdentifier.number, create_new_object(boardIdentifier.vars["jiraVimBoardName"]))
+            self.assignBoard(board, boardIdentifier)
+            return board
         else:
             return None
 

@@ -3,3 +3,6 @@ plugin/credentials.vim
 # Python byte-compiled, DLL files
 __pycache__/
 *.py[cod]
+
+# Vader test files
+test/

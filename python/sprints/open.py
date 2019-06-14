@@ -4,13 +4,12 @@ from ..util.drawUtil import DrawUtil
 
 def JiraVimSprintOpen(sessionStorage, isSplit=True):
     sprintName = str(sys.argv[0])
-    connection = sessionStorage.connection
 
     boardBuffer = vim.current.buffer
     boardName = boardBuffer.vars["jiraVimBoardName"].decode("utf-8")
 
     if boardName is not None:
-        board = connection.getBoard(boardName)
+        board = sessionStorage.getBoard(boardName)
         buf, _ = sessionStorage.getBuff(objName=sprintName)
         if isSplit:
             vim.command("sbuffer "+str(buf.number))

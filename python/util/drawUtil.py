@@ -117,7 +117,7 @@ class DrawUtil():
         return len(key), len(summ)
 
     @staticmethod
-    def draw_category(buf, obj, category, line=None, more=False, formatter=None):
+    def draw_category(buf, obj, category, line=None, more=False, formatter=None, with_header=True):
         """
         Draws a category in the buffer.
 
@@ -144,6 +144,8 @@ class DrawUtil():
                 window_width
                 )
             The values of the variables should be self-explanatory. If not defined, it's chosen depending on the type of object, dud function for scrum boards and DrawUtil.ISSUE_FORMATTER otherwise.
+        with_header : Boolean (Optional)
+            Boolean that specifies if the header of the category should be displayed. True by default.
 
         Returns
         -------
@@ -164,10 +166,11 @@ class DrawUtil():
         if not line:
             line = len(buf)+1
 
-        buf.append(category[0].upper()+":", line-1)
-        line += 1
-        buf.append("-"*(len(category[0])+1), line-1)
-        line += 1
+        if with_header:
+            buf.append(category[0].upper()+":", line-1)
+            line += 1
+            buf.append("-"*(len(category[0])+1), line-1)
+            line += 1
 
         startLine = line
         items = category[1]
@@ -190,7 +193,7 @@ class DrawUtil():
         return line
 
     @staticmethod
-    def draw_items(buf, obj, sessionStorage, line=None, itemExtractor=None):
+    def draw_items(buf, obj, sessionStorage, line=None, itemExtractor=None, withCategoryHeaders=True):
         """
         Draw a set of items from an object.
 
@@ -208,6 +211,8 @@ class DrawUtil():
             Line on which to start drawing. If not defined, appends to the end of the buffer
         itemExtractor : Lambda (Optional)
             Lambda that accepts an object and returns a list of items separated by category. If not defined, defaults to calling the getIssues method of the object. Can also return a tuple where the first element is the list of items, and the second is a boolean that represents whether there are more elements.
+        withCategoryHeaders : Boolean (Optional)
+            Boolean that determines whether the headers for the categories will be displayed. True by default.
 
         Returns
         -------
@@ -244,7 +249,7 @@ class DrawUtil():
             more = False
 
         for cat in items:
-            line = DrawUtil.draw_category(buf, obj, cat, line, more=more) + 1
+            line = DrawUtil.draw_category(buf, obj, cat, line, more=more, with_header=withCategoryHeaders) + 1
         return line
 
     @staticmethod
@@ -267,6 +272,7 @@ class DrawUtil():
         """
 
         buf.append("---MORE---", line-1)
+
         return line+1
 
     @staticmethod

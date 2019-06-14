@@ -7,16 +7,36 @@ class KanbanBoard(Board):
         Board.__init__(self, boardId, boardName, connection)
         self.columnExtractors = {}
 
-        self.issueExtractor = ItemExtractor(self.connection, self.baseUrl+"/issue?fields=%s", lambda: (','.join(self.requiredProperties),))
-
         for col in self.columns:
             self.columnExtractors[col] = ItemExtractor.create_column_issue_extractor(self, col)
 
-
     def getIssues(self, column=None):
-        if column and column in self.columnExtractors:
-            r = self.columnExtractors[column].__next__()
+        """
+        Get a batch of issues from board.
+
+        Get a batch of issues from the board, either sorted by column or from all columns. If by column returns at most 10 from the column specified. Otherwise, collects issues from all columns in batches and returns them, categorized.
+
+        Parameters
+        ----------
+        column : String (Optional)
+            Column from which to retrieve issues.
+
+        Returns
+        -------
+        List
+            Categorized list of (<column_name>, [issue keys]) tuples according to the issue categorizer from ItemCategorizer.
+
+        """
+
+        if column:
+            columns = [column]
+            returnLambda = lambda a, b: (a, b)
         else:
-            r = self.issueExtractor.__next__()
+            columns = self.columns
+            returnLambda = lambda a, b: a
+        returnIssues = []
+        for c in columns:
+            r = self.columnExtractors[c].__next__()
+            returnIssues += ItemCategorizer.issueCategorizer(r["issues"], self.statusToColumn)
         # Sort issues by Category
-        return ItemCategorizer.issueCategorizer(r["issues"], self.statusToColumn), bool(column and not self.columnExtractors[column].finished)
+        return returnLambda(returnIssues, bool(column and not self.columnExtractors[column].finished))
