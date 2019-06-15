@@ -251,7 +251,7 @@ class DrawUtil():
         return line
 
     @staticmethod
-    def draw_more(buf, line):
+    def draw_more(buf, line=None):
         """
         Draws the "MORE" symbol for columns representing extracts that have not been fully consumed.
 
@@ -259,8 +259,8 @@ class DrawUtil():
         ----------
         buf : Buffer
             Buffer to be drawn to
-        line : Integer
-            Line to be drawn on
+        line : Integer (Optional)
+            Line to be drawn on. Defaults to the end of the buffer.
 
         Returns
         -------
@@ -268,6 +268,9 @@ class DrawUtil():
             returns line + 1
 
         """
+
+        if not line:
+            line = len(buf) + 1
 
         buf.append("---MORE---", line-1)
 
