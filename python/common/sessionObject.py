@@ -47,10 +47,10 @@ class SessionObject():
 
     def assignSprint(self, sprint, buff):
         """
-        Assigns a sprint to the session sprint cache
+        Assigns a sprint to the session sprint cache. Note that it doesn't assign by sprint name.
         """
         self.__sprintsHash[buff.number] = sprint
-        self.__sprintsHash[sprint.name] = sprint
+        self.__sprintsHash[buff] = sprint
 
     def assignIssue(self, issue, buff):
         self.__bufferHash[issue.id] = buff
@@ -111,7 +111,7 @@ class SessionObject():
             return sprint
         sprint = self.__sprintsHash.get(sprintIdentifier, None)
         if sprint and isinstance(sprintIdentifier, int):
-            self.assignSprint(sprint, sprintIdentifier)
+            self.assignSprint(sprint, vim.buffers[sprintIdentifier])
         return sprint
 
     # Returns the buffer, and a boolean that says whether the buffer is newly created or existing one

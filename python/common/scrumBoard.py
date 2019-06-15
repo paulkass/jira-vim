@@ -22,7 +22,7 @@ class ScrumBoard(Board):
             self.__sprintsById[int(sprintObj["id"])] = sprint
             self.__sprintsByName[sprintObj["name"]] = sprint
 
-    def getSprints(self, startAt=0, maxResults=50):
+    def getSprints(self):
         # No pagination support for Sprints yet
         return [["Sprints", False, [(name, " ") for name in self.__sprintsByName]]]
 

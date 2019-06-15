@@ -14,15 +14,12 @@ class Sprint():
         self.connection = connection
         self.requiredProperties = ["key", "status", "summary"]
 
-        #self.issueExtractor = ItemExtractor(self.connection, self.baseUrl+"/issue?fields=%s", lambda: (','.join(self.requiredProperties),))
         self.columnExtractors = {}
         for col in self.board.columns:
             self.columnExtractors[col] = ItemExtractor.create_column_issue_extractor(self.board, col)
 
 
     def getIssues(self, column=None):
-        #r = self.issueExtractor.__next__()
-
         if column:
             columns = [column]
         else:
@@ -31,5 +28,4 @@ class Sprint():
         for c in columns:
             r = self.columnExtractors[c].__next__()
             returnIssues += ItemCategorizer.issueCategorizer(r["issues"], self.board.statusToColumn, self.columnExtractors)
-        #return ItemCategorizer.issueCategorizer(r["issues"], self.board.statusToColumn)
         return returnIssues
