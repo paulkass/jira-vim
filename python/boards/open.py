@@ -1,12 +1,10 @@
 import sys
 import vim
 from ..util.drawUtil import DrawUtil
-from ..common.kanbanBoard import KanbanBoard
 
 # arguments expected in sys.argv
 def JiraVimBoardOpen(sessionStorage, isSplit=True):
     boardName = str(sys.argv[0])
-    connection = sessionStorage.connection
 
     # Buff Setup Commands
     buf, new = sessionStorage.getBuff(objName=boardName)
