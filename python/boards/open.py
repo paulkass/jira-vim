@@ -12,9 +12,8 @@ def JiraVimBoardOpen(sessionStorage, isSplit=True):
         vim.command("sbuffer "+str(buf.number))
     else:
         vim.command("buffer "+str(buf.number))
-    vim.command("let b:jiraVimBoardName = \"%s\"" % boardName)
     if new:
-        board = sessionStorage.getBoard(boardName)
+        board = sessionStorage.getBoard(buf.number, boardName=boardName)
         DrawUtil.draw_header(buf, board, boardName)
         DrawUtil.draw_items(buf, board, sessionStorage)
         DrawUtil.set_filetype(board)
