@@ -6,7 +6,7 @@ function! JiraVimLoadMore()
 
     silent execute 'normal! ?\v^-+' . "\<cr>"
     normal! k
-    let l:categoryName = matchstr(getline("."), '\v^\u+')
+    let l:categoryName = matchstr(getline("."), '\v^(\u+\s?)+')
     let l:first_issue_line = line(".") + 2
 
     " Move the cursor back to the more line
@@ -14,6 +14,12 @@ function! JiraVimLoadMore()
     
     set modifiable
     execute "python3 sys.argv = [\"" . l:categoryName . "\", " . l:moreline . "]"
-    execute "python3 python.boards.more.JiraVimLoadMore(sessionStorage)"
+    if &filetype == "jirasprintview"
+        execute "python3 python.sprints.more.JiraVimLoadMore(sessionStorage)"
+    elseif &filetype == "jiraboardview" || &filetype == "jirakanbanboardview"
+        execute "python3 python.boards.more.JiraVimLoadMore(sessionStorage)"
+    else
+        throw "Not a valid target for loading more issues"
+    endif
     set nomodifiable
 endfunction

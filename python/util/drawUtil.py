@@ -210,7 +210,7 @@ class DrawUtil():
         line : int (Optional)
             Line on which to start drawing. If not defined, appends to the end of the buffer
         itemExtractor : Lambda (Optional)
-            Lambda that accepts an object and returns a list of items separated by category. If not defined, defaults to calling the getIssues method of the object. Can also return a tuple where the first element is the list of items, and the second is a boolean that represents whether there are more elements.
+            Lambda that accepts an object and returns a list of items separated by category. If not defined, defaults to calling the getIssues method of the object. Returns a list of tuples with 3 elements each: the name of the category, the "more" parameter, and the list of item keys.
         withCategoryHeaders : Boolean (Optional)
             Boolean that determines whether the headers for the categories will be displayed. True by default.
 
@@ -233,23 +233,21 @@ class DrawUtil():
 
         # Associate buffer with object in sessionStorage
         addBoardFunc = sessionStorage.assignBoard
+        addSprintFunc = sessionStorage.assignSprint
         dudFunc = lambda a, b: b
         DrawUtil.__type_selector(
             board=addBoardFunc,
+            sprint=addSprintFunc,
             default=dudFunc,
             obj=obj
             )(obj, buf)
 
         extraction = itemExtractor(obj)
 
-        if type(extraction) is tuple:
-            items, more = extraction
-        else:
-            items = extraction
-            more = False
-
-        for cat in items:
-            line = DrawUtil.draw_category(buf, obj, cat, line, more=more, with_header=withCategoryHeaders) + 1
+        for cat in extraction:
+            more = cat[1]
+            item_list = (cat[0], cat[2])
+            line = DrawUtil.draw_category(buf, obj, item_list, line, more=more, with_header=withCategoryHeaders) + 1
         return line
 
     @staticmethod

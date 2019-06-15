@@ -13,6 +13,8 @@ class SessionObject():
         # Also cache board objects: this one maps buffer numbers to Board and Sprint objects
         self.__boardsHash = {}
 
+        self.__sprintsHash = {}
+
     @staticmethod
     def getConnectionFromVars():
         domainName = vim.vars["jiraVimDomainName"].decode("utf-8")
@@ -43,6 +45,13 @@ class SessionObject():
         self.__boardsHash[buff.number] = board
         self.__boardsHash[board.boardName] = board
 
+    def assignSprint(self, sprint, buff):
+        """
+        Assigns a sprint to the session sprint cache
+        """
+        self.__sprintsHash[buff.number] = sprint
+        self.__sprintsHash[sprint.name] = sprint
+
     def assignIssue(self, issue, buff):
         self.__bufferHash[issue.id] = buff
         self.__namesToIds[issue.issueKey] = issue.id
@@ -61,7 +70,9 @@ class SessionObject():
         """
         Retrieve board object based on buffer number
 
-        This function takes in an identifier and tries to retrieve an object from the cache corresponding to the identifier (which can be a buffer id, a buffer, or a string of the board name). If it does not find a string object, it goes ahead and creates one by calling the getBoard method of the connection object. If it does not find a buffer number of buffer object in the cache, it creates one based on the jiraVimBoardName variable.
+        This function takes in an identifier and tries to retrieve an object from the cache corresponding to the identifier (which can be a buffer id, a buffer, or a string of the board name). If it does not find a string object, it goes ahead and creates one by calling the getBoard method of the connection object. If it does not find a buffer number of buffer object in the cache, it creates one based on the jiraVimBoardName variable. 
+
+        This function only accounts for missing keys in the cache.
 
         Parameters
         ----------
@@ -76,19 +87,32 @@ class SessionObject():
         """
         create_new_object = self.connection.getBoard
 
-        if type(boardIdentifier) is int :
+        if isinstance(boardIdentifier, int):
             board = self.__boardsHash.get(boardIdentifier, create_new_object(vim.buffers[boardIdentifier].vars["jiraVimBoardName"]))
             self.assignBoard(board, vim.buffer[boardIdentifier])
             return board
-        elif type(boardIdentifier) is str:
+        if isinstance(boardIdentifier, str):
             board = self.__boardsHash.get(boardIdentifier, create_new_object(boardIdentifier))
             return board
-        elif type(boardIdentifier) is vim.buffer:
+        if boardIdentifier in vim.buffers:
             board = self.__boardsHash.get(boardIdentifier.number, create_new_object(boardIdentifier.vars["jiraVimBoardName"]))
             self.assignBoard(board, boardIdentifier)
             return board
-        else:
-            return None
+        return None
+
+    def getSprint(self, sprintIdentifier):
+        """
+        Similar to getBoard for boards: returns cached sprint if it could find it for this buffer or name
+        """
+        if sprintIdentifier in vim.buffers:
+            sprint = self.__sprintsHash.get(sprintIdentifier.number, None)
+            if sprint:
+                self.assignSprint(sprint, sprintIdentifier)
+            return sprint
+        sprint = self.__sprintsHash.get(sprintIdentifier, None)
+        if sprint and isinstance(sprintIdentifier, int):
+            self.assignSprint(sprint, sprintIdentifier)
+        return sprint
 
     # Returns the buffer, and a boolean that says whether the buffer is newly created or existing one
     def getBuff(self, objId=None, objName=None, createNew=True, isSplit=False):

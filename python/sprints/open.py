@@ -16,8 +16,12 @@ def JiraVimSprintOpen(sessionStorage, isSplit=True):
         else:
             vim.command("buffer "+str(buf.number))
         vim.command("let b:jiraVimBoardName = \"%s\"" % boardName)
+        vim.command("let b:jiraVimSprintName = \"%s\"" % sprintName)
 
-        sprint = board.getSprint(sprintName)
+        sprint = sessionStorage.getSprint(sprintName)
+        if not sprint:
+            sprint = board.getSprint(sprintName)
+            sessionStorage.assignSprint(sprint, buf)
         DrawUtil.draw_header(buf, sprint, sprintName)
         DrawUtil.draw_items(buf, sprint, sessionStorage)
         DrawUtil.set_filetype(sprint)

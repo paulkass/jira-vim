@@ -27,4 +27,4 @@ class Board:
     def getIssues(self, column=None):
         r = self.issueExtractor.__next__()
         categoryName = "All Issues"
-        return [(categoryName, [(i["key"], "") for i in r["issues"]])]
+        return [(categoryName, self.issueExtractor.finished, [(i["key"], "") for i in r["issues"]])]

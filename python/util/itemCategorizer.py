@@ -2,7 +2,7 @@
 class ItemCategorizer():
 
     @staticmethod
-    def issueCategorizer(issues, statusToColumn):
+    def issueCategorizer(issues, statusToColumn, columnExtractors):
         """
         Categorizes issues based on category.
 
@@ -14,6 +14,8 @@ class ItemCategorizer():
             A json string containing an "issues" field that contains an array of issues to be processed.
         statusToColumn : Dict
             A dictionary that maps status to columns. This is a many to one relationship.
+        columnExtractos : Dict
+            A dictionary that maps columns to the extractor. Used only to assign the "more" parameter, that is to see if the extractor is finished.
 
         Returns
         -------
@@ -30,4 +32,4 @@ class ItemCategorizer():
             if column not in columnToIssues:
                 columnToIssues[column] = set()
             columnToIssues[column].add(key)
-        return [(a, list(b)) for a, b in columnToIssues.items() if len(b) > 0]
+        return [(a, not columnExtractors[a].finished, list(b)) for a, b in columnToIssues.items() if len(b) > 0]

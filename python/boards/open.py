@@ -17,11 +17,6 @@ def JiraVimBoardOpen(sessionStorage, isSplit=True):
     vim.command("let b:jiraVimBoardName = \"%s\"" % boardName)
     if new:
         board = sessionStorage.getBoard(boardName)
-        line = DrawUtil.draw_header(buf, board, boardName)
-        if isinstance(board, KanbanBoard):
-            # Need to account for columns
-            for col in board.columns:
-                line = DrawUtil.draw_items(buf, board, sessionStorage, itemExtractor=lambda b, col_name=col: b.getIssues(column=col_name))
-        else:
-            DrawUtil.draw_items(buf, board, sessionStorage)
+        DrawUtil.draw_header(buf, board, boardName)
+        DrawUtil.draw_items(buf, board, sessionStorage)
         DrawUtil.set_filetype(board)
