@@ -1,11 +1,12 @@
 
+import re
+import requests
+
 from jira import JIRA
 from .board import Board
 from .kanbanBoard import KanbanBoard
 from .scrumBoard import ScrumBoard
 from .issue import Issue
-import requests
-import re
 
 class Connection:
     def __init__(self, name, email, token):

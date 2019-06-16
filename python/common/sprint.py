@@ -1,4 +1,5 @@
 from ..util.itemCategorizer import ItemCategorizer
+from ..util.itemExtractor import ItemExtractor
 
 class Sprint():
     def __init__(self, sprintId, url, board, connection, state=None, name=None, startDate=None, endDate=None):
@@ -9,12 +10,22 @@ class Sprint():
         self.__state = state
         self.__startDate = startDate
         self.__endDate = endDate
-        self.baseUrl = "/rest/agile/1.0/board/"+str(board.id)+"/sprint/"+str(id)
+        self.baseUrl = "/rest/agile/1.0/board/"+str(board.id)+"/sprint/"+str(sprintId)
         self.connection = connection
         self.requiredProperties = ["key", "status", "summary"]
-        self.__columnToIssues = {}
 
-    def getIssues(self, startAt=0, maxResults=50):
-        r = self.connection.customRequest(self.baseUrl+"/issue?fields=%s&startAt=%d&maxResults=%d" % (','.join(self.requiredProperties), startAt, maxResults)).json()
+        self.columnExtractors = {}
+        for col in self.board.columns:
+            self.columnExtractors[col] = ItemExtractor.create_column_issue_extractor(self.board, col)
 
-        return ItemCategorizer.issueCategorizer(r["issues"], self.board.statusToColumn, self.__columnToIssues)
+
+    def getIssues(self, column=None):
+        if column:
+            columns = [column]
+        else:
+            columns = self.board.columns
+        returnIssues = []
+        for c in columns:
+            r = self.columnExtractors[c].__next__()
+            returnIssues += ItemCategorizer.issueCategorizer(r["issues"], self.board.statusToColumn, self.columnExtractors)
+        return returnIssues

@@ -1,4 +1,6 @@
 
+from ..util.itemExtractor import ItemExtractor
+
 class Board:
     def __init__(self, boardId, boardName, connection):
         self.connection = connection
@@ -9,15 +11,20 @@ class Board:
 
         self.boardConf = self.connection.customRequest(self.baseUrl+"/configuration").json()
         self.statusToColumn = {}
+        self.columns = set()
+
         """
         The idea here is that each column can display many statuses. So the relationship from status to column is many to one. Then each instance sorts issues into columns on its own.
         """
         for col in self.boardConf["columnConfig"]["columns"]:
             cName = col["name"]
+            self.columns.add(cName)
             for s in col["statuses"]:
                 self.statusToColumn[s["id"]] = cName
 
-    def getIssues(self, startAt=0, maxResults=50):
-        r = self.connection.customRequest(self.baseUrl+"/issue?fields=%s&startAt=%d&maxResults=%d" % (','.join(self.requiredProperties), \
-                startAt, maxResults)).json()
-        return [("All Issues", [(i["key"], "") for i in r["issues"]])]
+        self.issueExtractor = ItemExtractor(self.connection, self.baseUrl+"/issue?fields=%s", lambda: (','.join(self.requiredProperties),))
+
+    def getIssues(self, column=None):
+        r = self.issueExtractor.__next__()
+        categoryName = "All Issues"
+        return [(categoryName, self.issueExtractor.finished, [(i["key"], "") for i in r["issues"]])]
