@@ -1,0 +1,23 @@
+
+Execute (Load more Backlog):
+  :call JiraVimBoardOpen("TEST") 
+  /BACKLOG
+  let b:backlogLine = line(".")
+  /MORE
+  let b:moreLine = line(".") 
+  :call JiraVimLoadMore()
+  sleep 2
+
+Then (Make sure that more issues load):
+  execute ":" . b:backlogLine
+  Assert getline(".") =~# '\v^BACKLOG:', "Match didn't happen in backlog section"
+  execute ":" . b:moreLine
+  Assert getline(".") =~# '\v^TEST-\d+\s+.+', "No more issues were loaded"
+  Assert getline(".") !=? getline(b:backlogLine + 2), "Reloading old issues"
+  try 
+    /MORE
+    let b:newMoreLine = line(".")
+  catch /Pattern\ not\ found:\ MORE/
+    let b:newMoreLine = b:moreLine + 1
+  endtry
+  Assert b:newMoreLine > b:moreLine, "MORE line didn't move" 
