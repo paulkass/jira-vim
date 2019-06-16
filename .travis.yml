@@ -1,28 +1,43 @@
-language: vim
-os: xenial
+language: python
+os: linux
+dist: xenial
 python: 3.5
 
 # Email is burner.a5c67606@tryninja.io  
 # Access key is 9kAJ0LfQihsVjZ8cfM8eED55 
 
 before_script: |
+  vim --version
+  python --version
+  pip --version
+  pip list
   git clone https://github.com/junegunn/vader.vim.git
   git clone https://github.com/godlygeek/tabular.git
-  git clone https://github.com/vim/vim.git
-  cd vim
-  ./configure --with-features=huge --enable-python3interp --disable-pythoninterp
-  make
-  sudo make install
-  cd -
-  pip install -r python/requirements.txt
-  python --version
+  #git clone https://github.com/vim/vim.git --branch v8.1.0648
+  #cd vim
+  #./configure --with-features=huge --enable-python3interp --disable-pythoninterp --with-python3-command=python
+  #CFLAGS="{$CFLAGS} -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1"
+  #make
+  #sudo make install
+  #cd -
+  #/usr/local/bin/vim --version
 
 script: |
-  #/usr/local/bin/vim -Nu <(cat <<VIMRC
-  vim -Nu <(cat <<VIMRC
-  let jiraVimEmail = "burner.a5c67606@tryninja.io"
-  let jiraVimToken = "9kAJ0LfQihsVjZ8cfM8eED55" 
-  set rtp+=vader.vim
-  set rtp+=tabular
-  set rtp+=.
-  VIMRC) -c "Vader!test/*"
+    #let jiraVimEmail = "burner.a5c67606@tryninja.io"
+    #let jiraVimToken = "9kAJ0LfQihsVjZ8cfM8eED55" 
+    #set rtp+=vader.vim
+    #set rtp+=tabular
+    #set rtp+=.
+    #VIMRC) -c "Vader!test/*"
+    vim -Nu <(cat <<EOF
+    let jiraVimDomainName = "jira-vim"
+    let jiraVimEmail = "burner.a5c67606@tryninja.io"
+    let jiraVimToken = "9kAJ0LfQihsVjZ8cfM8eED55" 
+    set rtp+=tabular
+    set rtp+=vader.vim
+    set rtp+=.
+    python3 import sys
+    python3 sys.path.append('/home/travis/virtualenv/python3.5.6/lib/python3.5/site-packages')
+    EOF) -c "Vader! -q test/*" 
+    #EOF) -c "call JiraVimBoardOpen('TEST')"
+    #/usr/local/bin/vim -c "python3 print(\"hi\")"
