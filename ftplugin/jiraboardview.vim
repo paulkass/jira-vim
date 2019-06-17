@@ -1,6 +1,5 @@
 
-setl buftype=nofile
-setl hidden
-setl nomodifiable
+set buftype=nofile
+set hidden
 normal! gg
 
