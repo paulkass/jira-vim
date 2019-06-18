@@ -1,0 +1,25 @@
+
+Execute (Open an issue):
+  " Open issue in current window
+  :call JiraVimBoardOpen("TEST")
+  sleep 1
+  /BACKLOG
+  normal! 2j
+  :call JiraVimBoardIssueSelect("JiraVimIssueOpen")
+  sleep 1
+
+Then (Expect header to appear and a description):
+  normal! gg
+  AssertNotEqual -1, match(getline("."), '\v^(\u+)-\d+\s+\1$'), "No Header found"
+  normal! j
+  AssertNotEqual -1, match(getline("."), '\v^\=+$'), "No Underlining found for header"
+
+  let b:curLine = line(".") 
+  /\v^Summary: .+$
+  AssertNotEqual b:curLine, line("."), "No Summary section found"
+
+  let b:curLine = line(".") 
+  /\v^Description: .+$
+  AssertNotEqual b:curLine, line("."), "No Description section found"
+
+    

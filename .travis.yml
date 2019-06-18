@@ -13,22 +13,8 @@ before_script: |
   pip list
   git clone https://github.com/junegunn/vader.vim.git
   git clone https://github.com/godlygeek/tabular.git
-  #git clone https://github.com/vim/vim.git --branch v8.1.0648
-  #cd vim
-  #./configure --with-features=huge --enable-python3interp --disable-pythoninterp --with-python3-command=python
-  #CFLAGS="{$CFLAGS} -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1"
-  #make
-  #sudo make install
-  #cd -
-  #/usr/local/bin/vim --version
 
 script: |
-    #let jiraVimEmail = "burner.a5c67606@tryninja.io"
-    #let jiraVimToken = "9kAJ0LfQihsVjZ8cfM8eED55" 
-    #set rtp+=vader.vim
-    #set rtp+=tabular
-    #set rtp+=.
-    #VIMRC) -c "Vader!test/*"
     vim -Nu <(cat <<EOF
     let jiraVimDomainName = "jira-vim"
     let jiraVimEmail = "burner.a5c67606@tryninja.io"
@@ -40,7 +26,3 @@ script: |
     python3 import sys
     python3 sys.path.append('/home/travis/virtualenv/python3.5.6/lib/python3.5/site-packages')
     EOF) -c "Vader! -q test/*" 
-    #EOF) -s <(cat <<EOF
-    #:call JiraVimBoardOpen('A second')
-    #EOF)
-    #/usr/local/bin/vim -c "python3 print(\"hi\")"
