@@ -4,7 +4,7 @@ Execute (Open the board):
   let w:boardNumber = bufnr("%") 
   /BACKLOG
   normal! 2j
-  JiraVimBoardIssueSelect JiraVimIssueOpen
+  JiraVimSelectIssueNosp
   JiraVimReturn
 
 Then (Make sure that it's actually the TEST board):

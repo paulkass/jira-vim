@@ -1,4 +1,4 @@
-function! <SID>JiraVimBoardIssueSelect(funcname)
+function! <SID>JiraVimSelectIssue(funcname)
     let l:funcname = JiraVimTrimHelper(a:funcname)
     call check#CheckStorageSession()
     if -1 !=# matchstr(&filetype, g:jiraBoardFiletypePattern)  
@@ -14,4 +14,8 @@ function! <SID>JiraVimBoardIssueSelect(funcname)
     endif
 endfunction
 
-command -nargs=1 -complete=command JiraVimBoardIssueSelect call <SID>JiraVimBoardIssueSelect(<q-args>)
+command -nargs=1 -complete=command JiraVimSelectIssue call <SID>JiraVimSelectIssue(<q-args>)
+
+" Convenience commands for split and nosplit
+command JiraVimSelectIssueNosp call <SID>JiraVimSelectIssue("JiraVimIssueOpen")
+command JiraVimSelectIssueSp call <SID>JiraVimSelectIssue("JiraVimIssueOpenSp")

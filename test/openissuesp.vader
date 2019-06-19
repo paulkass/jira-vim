@@ -4,7 +4,7 @@ Execute (Open an issue):
   let g:originalWinNumber = winnr() 
   /BACKLOG
   normal! 2j
-  JiraVimBoardIssueSelect JiraVimIssueOpenSp
+  JiraVimSelectIssueSp
   sleep 1
 
 Then (Expect a header to appear):

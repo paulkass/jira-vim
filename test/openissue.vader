@@ -5,7 +5,7 @@ Execute (Open an issue):
   sleep 1
   /BACKLOG
   normal! 2j
-  JiraVimBoardIssueSelect JiraVimIssueOpen
+  JiraVimSelectIssueNosp
   sleep 1
 
 Then (Expect header to appear and a description):

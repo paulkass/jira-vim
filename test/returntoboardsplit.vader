@@ -4,7 +4,7 @@ Execute (Open the board):
   let g:boardWinNumber = winnr()
   /BACKLOG
   normal! 2j
-  JiraVimBoardIssueSelect JiraVimIssueOpenSp
+  JiraVimSelectIssueSp
   JiraVimReturn
 
 Then (Make sure that it's the TEST board and that it's the same window):
