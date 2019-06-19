@@ -1,0 +1,22 @@
+
+Execute (Open the board):
+  :call JiraVimBoardOpen("TEST")
+  let w:boardNumber = bufnr("%") 
+  /BACKLOG
+  normal! 2j
+  :call JiraVimBoardIssueSelect("JiraVimIssueOpen")
+  :call JiraVimReturn() 
+
+Then (Make sure that it's actually the TEST board):
+  Assert getline(1) ==# "TEST board", "No header found" 
+  Assert getline(2) ==# "===========", "No underlining found"
+
+  " Find the BACKLOG category
+  /BACKLOG
+  Assert getline(".") =~# "BACKLOG:", "No Backlog section"
+  normal! j 
+  Assert getline(".") ==# "--------", "No underlining for backlog section"
+
+  " Make sure there is at least an issue properly formatted 
+  normal! j
+  Assert getline(".") =~# '\v^TEST\-\d+\s+.+$', "No issue in Backlog"

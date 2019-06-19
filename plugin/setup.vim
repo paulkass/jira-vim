@@ -9,3 +9,6 @@ python3 import python.boards.more
 python3 import python.issues.open
 python3 import python.sprints.open
 python3 import python.sprints.more
+
+" Set some global constants
+let g:jiraBoardFiletypePattern = '\vjira\a*boardview'
