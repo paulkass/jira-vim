@@ -1,12 +1,12 @@
-function! JiraVimBoardIssueSelect(funcname)
+function! <SID>JiraVimBoardIssueSelect(funcname)
+    let l:funcname = JiraVimTrimHelper(a:funcname)
     call check#CheckStorageSession()
     if -1 !=# matchstr(&filetype, g:jiraBoardFiletypePattern)  
         let l:bufferNumber = bufnr("%") 
         let l:line = getline(line("."))
-        let l:issueMatch = substitute(matchstr(l:line, '\v\u+-\d+\s'), '\v\s+$', '', 'g')
+        let l:issueMatch = JiraVimTrimHelper(matchstr(l:line, '\v\u+-\d+\s'))
         if l:issueMatch != ""
-            let l:Func = function(a:funcname, [l:issueMatch])
-            call l:Func()
+            execute l:funcname " " l:issueMatch
             let b:boardBufferNumber = l:bufferNumber 
         endif
     else
@@ -14,3 +14,4 @@ function! JiraVimBoardIssueSelect(funcname)
     endif
 endfunction
 
+command -nargs=1 -complete=command JiraVimBoardIssueSelect call <SID>JiraVimBoardIssueSelect(<q-args>)

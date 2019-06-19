@@ -1,5 +1,5 @@
 
-function! JiraVimLoadMore()
+function! <SID>JiraVimLoadMore()
     call check#CheckStorageSession()
 
     let l:moreline = line(".")
@@ -21,3 +21,5 @@ function! JiraVimLoadMore()
         throw "Not a valid target for loading more issues"
     endif
 endfunction
+
+command JiraVimLoadMore call <SID>JiraVimLoadMore()

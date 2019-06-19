@@ -1,11 +1,11 @@
 
 Execute (Load more Backlog):
-  :call JiraVimBoardOpen("TEST") 
+  JiraVimBoardOpen TEST 
   /BACKLOG
   let b:backlogLine = line(".")
   /MORE
   let b:moreLine = line(".") 
-  :call JiraVimLoadMore()
+  JiraVimLoadMore
   sleep 2
 
 Then (Make sure that more issues load):

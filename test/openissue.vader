@@ -1,11 +1,11 @@
 
 Execute (Open an issue):
   " Open issue in current window
-  :call JiraVimBoardOpen("TEST")
+  JiraVimBoardOpen TEST
   sleep 1
   /BACKLOG
   normal! 2j
-  :call JiraVimBoardIssueSelect("JiraVimIssueOpen")
+  JiraVimBoardIssueSelect JiraVimIssueOpen
   sleep 1
 
 Then (Expect header to appear and a description):

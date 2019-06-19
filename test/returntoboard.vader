@@ -1,11 +1,11 @@
 
 Execute (Open the board):
-  :call JiraVimBoardOpen("TEST")
+  JiraVimBoardOpen TEST
   let w:boardNumber = bufnr("%") 
   /BACKLOG
   normal! 2j
-  :call JiraVimBoardIssueSelect("JiraVimIssueOpen")
-  :call JiraVimReturn() 
+  JiraVimBoardIssueSelect JiraVimIssueOpen
+  JiraVimReturn
 
 Then (Make sure that it's actually the TEST board):
   Assert getline(1) ==# "TEST board", "No header found" 

@@ -1,6 +1,6 @@
 
 Execute (Open the second board):
-  :call JiraVimBoardOpen("A second")
+  execute "JiraVimBoardOpen A second"
   sleep 2
 
 Then (Expect header to appear and the sprint list):

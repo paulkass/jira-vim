@@ -1,13 +1,13 @@
 
 Execute (Load more from To Do):
-  :call JiraVimBoardOpen("A second") 
+  execute "JiraVimBoardOpen A second"
   /Sprint 1
-  :call JiraVimSelectSprint()
+  JiraVimSelectSprint
   /TO DO
   let b:todoline = line(".")
   /MORE
   let b:moreLine = line(".") 
-  :call JiraVimLoadMore()
+  JiraVimLoadMore
   sleep 2
 
 Then (Make sure that more issues load):

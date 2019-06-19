@@ -1,16 +1,21 @@
 
-function! JiraVimBoardOpen(name)
-    echo "Loading board " . a:name
+function! <SID>JiraVimBoardOpen(name)
+    let l:name = JiraVimTrimHelper(a:name)
+    echo "Loading board " . l:name
     call check#CheckStorageSession()  
 
-    execute "python3 sys.argv = [\"" . a:name . "\"]"
+    execute "python3 sys.argv = [\"" . l:name . "\"]"
     execute "python3 python.boards.open.JiraVimBoardOpen(sessionStorage)"
 endfunction
 
-function! JiraVimBoardOpenNoSp(name)
-    echo "Loading board " . a:name
-    call check#CheckStorageSession()  
+function! <SID>JiraVimBoardOpenNoSp(name)
+    let l:name = JiraVimTrimHelper(a:name)
+    echo "Loading board " . l:name
+    call check#CheckStorageSession()
 
-    execute "python3 sys.argv = [\"" . a:name . "\"]"
+    execute "python3 sys.argv = [\"" . l:name . "\"]"
     execute "python3 python.boards.open.JiraVimBoardOpen(sessionStorage, False)"
 endfunction
+
+command! -nargs=1 JiraVimBoardOpen call <SID>JiraVimBoardOpen(<q-args>)
+command! -nargs=1 JiraVimBoardOpenNosp call <SID>JiraVimBoardOpenNoSp(<q-args>)
