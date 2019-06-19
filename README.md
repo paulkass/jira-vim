@@ -21,4 +21,4 @@ Plug 'godlygeek/tabular'
 
 Please compile Vim with python3 for this plugin to function properly.
 
-Then install the `python/requirements.txt` file with pip.
+Then install the `requirements.txt` file with pip.
