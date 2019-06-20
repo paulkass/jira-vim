@@ -4,5 +4,3 @@ plugin/credentials.vim
 __pycache__/
 *.py[cod]
 
-# Vader test files
-test/

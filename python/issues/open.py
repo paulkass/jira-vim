@@ -1,5 +1,6 @@
-import vim
+
 import sys
+import vim
 from ..common.issue import Issue
 
 # Arguments are expected through sys.argv
@@ -8,17 +9,13 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
     connection = sessionStorage.connection
     filetype = "jiraissueview"
     # Carry on the board name from the previous buffer
-    if vim.eval("exists(\"b:jiraVimBoardName\")"):
-        boardName = vim.eval("b:jiraVimBoardName")
 
     buf, new = sessionStorage.getBuff(objName=issueKey)
     if isSplit:
         vim.command("sbuffer "+str(buf.number))
     else:
         vim.command("buffer "+str(buf.number))
-    if 'boardName' in locals():
-        vim.command("let b:jiraVimBoardName = \"%s\"" % boardName)
-
+    vim.command("set modifiable")
     if new:
         textWidth = vim.current.window.width
         issue = Issue(issueKey, connection)
@@ -36,9 +33,10 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
         buf.append("")
 
         buf.append("Summary: %s" % summary)
-        buf.append("") 
+        buf.append("")
 
         buf.append("Description: %s" % description)
         buf.append("")
 
         vim.command("setl filetype=%s" % filetype)
+    vim.command("set nomodifiable")

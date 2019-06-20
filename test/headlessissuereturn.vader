@@ -1,0 +1,12 @@
+
+Execute (Open the issue):
+  JiraVimIssueOpen TEST-4
+
+Then (Make sure it's an actual issue):
+  normal! gg
+  AssertNotEqual -1, match(getline("."), '\v^(\u+)-\d+\s+\1$'), "No Header found"
+  
+  " Attempt return
+  AssertThrows :JiraVimReturn
+  Log g:vader_exception
+  AssertNotEqual -1, match(g:vader_exception, '\v^Could not identify the return board buffer\c')

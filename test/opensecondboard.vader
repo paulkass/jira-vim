@@ -1,0 +1,17 @@
+
+Execute (Open the second board):
+  execute "JiraVimBoardOpen A second"
+  sleep 2
+
+Then (Expect header to appear and the sprint list):
+  Assert getline(1) ==# "A second board", "No header found"
+  Assert getline(2) ==# "===============", "No underlining found"
+
+  /SPRINTS
+  Assert getline(".") =~# "SPRINTS:", "No Sprint section"
+  normal! j
+  Assert getline(".") ==# "--------", "No underlining for sprint section"
+
+  " Make sure that the line only contains spaces and alphanumeric characters
+  normal! j
+  AssertNotEqual "", matchstr(getline("."), '\v^[[:alnum:][:space:]]+$'), "Sprint line is abnormal"

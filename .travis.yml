@@ -1,0 +1,28 @@
+language: python
+os: linux
+dist: xenial
+python: 3.5
+
+# Email is burner.a5c67606@tryninja.io  
+# Access key is 9kAJ0LfQihsVjZ8cfM8eED55 
+
+before_script: |
+  vim --version
+  python --version
+  pip --version
+  pip list
+  git clone https://github.com/junegunn/vader.vim.git
+  git clone https://github.com/godlygeek/tabular.git
+
+script: |
+    vim -Nu <(cat <<EOF
+    let jiraVimDomainName = "jira-vim"
+    let jiraVimEmail = "burner.a5c67606@tryninja.io"
+    let jiraVimToken = "9kAJ0LfQihsVjZ8cfM8eED55" 
+    set rtp+=tabular
+    set rtp+=vader.vim
+    set rtp+=.
+    filetype plugin on
+    python3 import sys
+    python3 sys.path.append('/home/travis/virtualenv/python3.5.6/lib/python3.5/site-packages')
+    EOF) -c "Vader! -q test/*" 

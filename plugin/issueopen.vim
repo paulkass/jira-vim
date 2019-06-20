@@ -1,20 +1,21 @@
 
-function! JiraVimIssueOpen(name)
-    echom "Loading issue " . a:name
+function! <SID>JiraVimIssueOpen(name)
+    let l:name = JiraVimTrimHelper(a:name)
+    echom "Loading issue " . l:name
     call check#CheckStorageSession()  
 
-    set modifiable
-    execute "python3 sys.argv = [\"" . a:name . "\"]"
+    execute "python3 sys.argv = [\"" . l:name . "\"]"
     execute "python3 python.issues.open.JiraVimIssueOpen(sessionStorage)"
-    set nomodifiable
 endfunction
 
-function! JiraVimIssueOpenSp(name)
-    echom "Loading issue " . a:name
+function! <SID>JiraVimIssueOpenSp(name)
+    let l:name = JiraVimTrimHelper(a:name)
+    echom "Loading issue " . l:name
     call check#CheckStorageSession()  
 
-    set modifiable
-    execute "python3 sys.argv = [\"" . a:name . "\"]"
+    execute "python3 sys.argv = [\"" . l:name . "\"]"
     execute "python3 python.issues.open.JiraVimIssueOpen(sessionStorage, True)"
-    set nomodifiable
 endfunction
+
+command -nargs=1 JiraVimIssueOpen call <SID>JiraVimIssueOpen(<q-args>)
+command -nargs=1 JiraVimIssueOpenSp call <SID>JiraVimIssueOpenSp(<q-args>)

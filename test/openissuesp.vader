@@ -1,0 +1,15 @@
+
+Execute (Open an issue):
+  JiraVimBoardOpen TEST
+  let g:boardBufferNumber = bufnr("%")
+  /BACKLOG
+  normal! 2j
+  JiraVimSelectIssueSp
+  sleep 1
+
+Then (Expect a header to appear):
+  AssertNotEqual bufwinnr(g:boardBufferNumber), winnr(), "A new window was not opened"
+  normal! gg
+  AssertNotEqual -1, match(getline("."), '\v^(\u+)-\d+\s+\1$'), "No Header found"
+  normal! j
+  AssertNotEqual -1, match(getline("."), '\v^\=+$'), "No Underlining found for header"
