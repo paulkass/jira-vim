@@ -1,14 +1,14 @@
 
 Execute (Open an issue):
   JiraVimBoardOpen TEST
-  let g:originalWinNumber = winnr() 
+  let g:boardBufferNumber = bufnr("%")
   /BACKLOG
   normal! 2j
   JiraVimSelectIssueSp
   sleep 1
 
 Then (Expect a header to appear):
-  AssertNotEqual g:originalWinNumber, winnr(), "A new window was not opened"
+  AssertNotEqual bufwinnr(g:boardBufferNumber), winnr(), "A new window was not opened"
   normal! gg
   AssertNotEqual -1, match(getline("."), '\v^(\u+)-\d+\s+\1$'), "No Header found"
   normal! j

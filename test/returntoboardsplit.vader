@@ -1,7 +1,7 @@
 
 Execute (Open the board):
   JiraVimBoardOpen TEST
-  let g:boardWinNumber = winnr()
+  let g:boardBufferNumber = bufnr("%")
   /BACKLOG
   normal! 2j
   JiraVimSelectIssueSp
@@ -11,5 +11,5 @@ Then (Make sure that it's the TEST board and that it's the same window):
   Assert getline(1) ==# "TEST board", "No header found" 
   Assert getline(2) ==# "===========", "No underlining found"
 
-  AssertEqual g:boardWinNumber, winnr(), "Didn't come back to the previous window"
+  AssertEqual bufwinnr(g:boardBufferNumber), winnr(), "Didn't come back to the previous window"
 
