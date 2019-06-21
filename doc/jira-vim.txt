@@ -11,13 +11,16 @@ jira-vim.txt    For Vim version 8.0     Last Change: 2019 June 19
 ================================================================================
 CONTENTS                                                        *jiravim-contents* 
 
-    01. Introduction .......................................... |jiravim-intro|
-    02. Setup ................................................. |jiravim-setup|
-    03. Commands ........................................... |jiravim-commands|
-    04. Filetypes ......................................... |jiravim-filetypes|
+    1. Introduction ........................................... |jiravim-intro|
+    2. Setup .................................................. |jiravim-setup|
+    3. Commands ............................................ |jiravim-commands|
+    4. Filetypes .......................................... |jiravim-filetypes|
+        a. Keybind Guide ......................... |jiravim-filetypes-keybinds|
+    5. License .............................................. |jiravim-license| 
+    6. Contact .............................................. |jiravim-contact|
 
 ================================================================================
-INTRODUCTION                                                    *jiravim-intro* 
+INTRODUCTION                                                       *jiravim-intro* 
 
 jira-vim is a way to view your JIRA setup without the bloat of the JIRA UI.
 
@@ -173,5 +176,74 @@ Here is the list of commands that are available to the user:
 ================================================================================
 FILETYPES                                                      *jiravim-filetypes*
 
+                                          *jiraboardview* *jiravim-boardview*
+jiraboardview
+    This filetype is a generic filetype for Jira board views. It sets syntax
+    options common to all boards, and each of the other board syntax files
+    source it. 
+
+                              *jirakanbanboardview* *jiravim-kanbanboardview*
+jirakanbanboardview
+    This filetype is for kanban board views. Sources the syntax files from
+    |jiraboarview|.
+
+    Some useful commands for this filetype include |JiraVimSelectIssueSp|,
+    |JiraVimSelectIssueNosp|, and |JiraVimLoadMore|. It's recommended that you
+    make keybindings for these commands, see |jiravim-filetypes-keybinds|. 
+
+                                *jirascrumboardview* *jiravim-scrumboardview*
+jirascrumboardview
+    This filetype displays a list of 50 sprints from the scrum board in
+    no particular order. Sources the syntax files from |jiraboarview|.
+
+    Some useful commands for this filetype include |JiraVimSelectSprint|. It's
+    recommended that you make keybindings for these commands, see
+    |jiravim-filetypes-keybinds|. 
+
+                                             *jiraissueview* *jiravim-issueview*
+jiraissueview 
+    This filetype displays the issue information about a particular issue. 
+
+    Some useful commands for this filetype include |JiraVimReturn|. It's
+    recommended that you make keybindings for these commands, see
+    |jiravim-filetypes-keybinds|. 
+
+                                           *jirasprintview* *jiravim-sprintview*
+jirasprintview
+    This filetype displays the issues in columns from a particular sprint.  
+
+    Some useful commands for this filetype include |JiraVimLoadMore|. It's
+    recommended that you make keybindings for these commands, see
+    |jiravim-filetypes-keybinds|. 
+
+--------------------------------------------------------------------------------
+Keybind Advice                                        *jiravim-filetypes-keybinds*
+
+It's recommended to put your keybinds into an |augroup| and assign them to
+filetypes with |autocmd|. So for example, a sample configuration would be: >
+    augroup! jiravim_keybinds
+        autocmd!
+        autocmd FileType jirakanbanboardview nnoremap <buffer> <localleader>si \
+            JiraVimSelectIssueSp
+        autocmd FileType jirakanbanboardview, jirasprintview nnoremap <buffer> \
+            <localleader>lm JiraVimLoadMore
+    augroup END
+
+<This would provide a single place where you would have all of your settings in
+one place.
+
+
+================================================================================
+LICENSE                                                          *jiravim-license* 
+
+All code in this project is licensed under GPLv3. This does not apply to any
+submodules and dependencies of this project.
+
+================================================================================
+CONTACT                                                          *jiravim-contact* 
+
+If you have bugs or feature suggestions, please open an issue on
+(https://github.com/paulkass/jira-vim). If you feel inclined to talk to me
+personally, send me an email at `leonardthesalmon@protonmail.com`
 
  vim:tw=80:ts=8:ft=help
