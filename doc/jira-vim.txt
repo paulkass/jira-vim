@@ -22,14 +22,15 @@ CONTENTS                                                        *jiravim-content
 ================================================================================
 INTRODUCTION                                                       *jiravim-intro* 
 
-jira-vim is a way to view your JIRA setup without the bloat of the JIRA UI.
+Jira-vim is a way to view your JIRA setup without the bloat of the JIRA UI.
 
-Imagine browsing Jira on your computer. All those buttons, animations, and fancy
-UI magic are really slowing down your computer that you don't really need. It's
-not improving your productivity, on the contrary it makes you wait to load
-features you don't need. So I created this: an attempt at de-bloating Jira by
-getting rid of the UI and using the standard Vim environment that we know and
-love to display data that we obtain from the API. 
+Imagine browsing Jira on your computer. All those buttons, animations, and
+fancy UI magic that you don't really need are really slowing down your
+computer. It's not improving your productivity, on the contrary it makes you
+wait and distract yourself while it loads features you'll never need! So I
+created this: an attempt at de-bloating Jira by getting rid of the UI and using
+the standard Vim environment that we know and love to display data that we
+obtain from the API. 
 
 ================================================================================
 SETUP                                                              *jiravim-setup*
