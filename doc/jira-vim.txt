@@ -131,15 +131,44 @@ Here is the list of commands that are available to the user:
         :JiraVimSelectIssue JiraVimIssueOpenSp
 <    See |JiraVimSelectIssue| for more information.
 
+                                               *jiravim-return* *:JiraVimReturn*
+:JiraVimReturn
+    Returns to the board from which the issue was opened. If the board buffer is
+    opened in an active window, moves the cursor to that window. Otherwise,
+    opens the board in the current window provided there are no unwritten
+    changes.
+
+    It uses the `b:boardBufferNumber` to orchestrate the return. Therefore you
+    can use this function wherever as long as the variable is set, although it's
+    only been tested when returning to a board view from an issue view. Designed
+    to complement |JiraVimSelectIssue|.
+
                                            *jiravim-loadmore* *:JiraVimLoadMore*
 :JiraVimLoadMore
     Loads more issues from a certain column. When browsing a board, columns that
-    have more than 10 issues will have a `---MORE---`line at the bottom. When
+    have more than 10 issues will have a `---MORE---` line at the bottom. When
     calling this function over that line, it will load at most 10 more issues
     from the board.
 
     It's recommended to set a keybind for this command in the appropriate
     filetypes (see |jiravim-filetypes|).
+
+                                       *jiravim-sprintopen* *:JiraVimSprintOpen*
+:JiraVimSprintOpen {name}
+    Opens sprint {name} in the current window. Will give an error if current
+    buffer has unsaved changes.
+
+    This function was intended to use with the Scrum board view. 
+
+                                   *jiravim-selectsprint* *:JiraVimSelectSprint*
+:JiraVimSelectSprint
+    Opens the sprint name from the current line. A convenience method that takes
+    the name of the sprint on the current line and calls |JiraVimSprintOpen|
+    with it.
+
+    This function was intended to use with the Scrum board view. It's
+    recommended to set a keybind for this command in the appropriate filetypes
+    (see |jiravim-filetypes|).
 
 ================================================================================
 FILETYPES                                                      *jiravim-filetypes*
