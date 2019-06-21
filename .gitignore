@@ -4,3 +4,6 @@ plugin/credentials.vim
 __pycache__/
 *.py[cod]
 
+# Tags for documentation
+doc/tags
+
