@@ -2,6 +2,7 @@
 import sys
 import vim
 from ..common.issue import Issue
+from ..util.drawUtil import DrawUtil
 
 # Arguments are expected through sys.argv
 def JiraVimIssueOpen(sessionStorage, isSplit=False):
@@ -17,20 +18,15 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
         vim.command("buffer "+str(buf.number))
     vim.command("set modifiable")
     if new:
-        textWidth = vim.current.window.width
         issue = Issue(issueKey, connection)
         obj = issue.obj
-        project = str(obj.fields.project)
-        summary = obj.fields.summary
-        description = obj.fields.description
+        project = str(issue.getField("project"))
+        summary = issue.getField("summary")
+        description = issue.getField("description")
 
         sessionStorage.assignIssue(issue, buf)
 
-        # For now, assume that the this is command is called from an already opened board window
-        buf[0] = "%s %s" % (issueKey, project)
-        vim.command("Tabularize /\\u\+-\d\+\s/r0c%dr0" % (textWidth-len(issueKey)-len(project)-7))
-        buf.append("="*len(issueKey))
-        buf.append("")
+        line = DrawUtil.draw_header(buf, issue, "%s %s" % (issueKey, project))
 
         buf.append("Summary: %s" % summary)
         buf.append("")

@@ -58,7 +58,7 @@ class DrawUtil():
         return args.get("default", None)
 
     @staticmethod
-    def draw_header(buf, obj, name):
+    def draw_header(buf, obj, name, formatting=None):
         """
         Draw the header for object.
 
@@ -70,6 +70,8 @@ class DrawUtil():
             The object to examine
         name : String
             The name of the object to be written.
+        formatting : Lambda (Optional)
+            Specifies the formatting of the first title line. If not specified, defaults to a tabular formatting for issues and a dud (no formatting) for the rest. The lambda accepts one argument, the text width for the window.
 
         Returns
         -------
@@ -78,15 +80,28 @@ class DrawUtil():
 
         """
 
+        text_width = vim.current.window.width
+
         postfix = DrawUtil.__type_selector(
             board="board",
             sprint="sprint",
+            issue="",
             obj=obj
             )
+
+        if not formatting:
+            formatting = DrawUtil.__type_selector(
+                default=lambda w: w,
+                issue=lambda w: vim.command("1Tabularize /\\u\+-\d\+\s/r0c%dr0" % (text_width-len(name)-7)),
+                obj=obj
+                ) 
 
         buf[0] = name + (" %s" % postfix)
         buf.append("="*(len(name)+7))
         buf.append("")
+
+        formatting(text_width)
+
         return 3
 
     @staticmethod
@@ -160,6 +175,7 @@ class DrawUtil():
         formatter = formatter if formatter else DrawUtil.__type_selector(
             obj=obj,
             scrum=lambda a, b, c, d, e: a,
+            issue=lambda a, b, c, d, e: a,
             default=DrawUtil.ISSUE_FORMATTER
             )
 
