@@ -27,6 +27,15 @@ With Vim-Plug, use:
 
     Plug 'paulkass/jira-vim'
 
+
+### Dependencies on Python
+
+Please compile Vim with python3 for this plugin to function properly.
+
+Then install the `requirements.txt` file with pip. Usually the command is 
+
+    pip install -r requirements.txt
+
 ## Documentation
 
 I think I put most of the good stuff into `:help jiravim`, so definitely check that out for information about the commands and how to get the show on the road.
@@ -42,12 +51,6 @@ Once you got the environment set up, here is a basic workflow:
 * You've had enough, you want to look at the other issues that the team must complete, so you return with `:JiraVimReturn`.
 
 I will try to do my best to be as backward compatible as possible moving forward, but I can make no guarantees.
-
-## Dependencies on Python
-
-Please compile Vim with python3 for this plugin to function properly.
-
-Then install the `requirements.txt` file with pip.
 
 ## Please Leave Feedback
 
