@@ -16,6 +16,26 @@ obtain from the API.
 
 Now that the basics are down, it's time to clean up for the alpha release. That means prettyfying things, simplifying stuff that can be automated fairly easily, and adding more information to places that were previously stubs or placeholders. You can view my progress on this [milestone](https://github.com/paulkass/jira-vim/milestone/1).
 
+## Installation
+
+With Pathogen, use:
+
+    cd ~/.vim/bundle
+    git clone https://github.com/paulkass/jira-vim
+
+With Vim-Plug, use:
+
+    Plug 'paulkass/jira-vim'
+
+
+### Dependencies on Python
+
+Please compile Vim with python3 for this plugin to function properly.
+
+Then install the `requirements.txt` file with pip. Usually the command is 
+
+    pip install -r requirements.txt
+
 ## Documentation
 
 I think I put most of the good stuff into `:help jiravim`, so definitely check that out for information about the commands and how to get the show on the road.
@@ -32,20 +52,7 @@ Once you got the environment set up, here is a basic workflow:
 
 I will try to do my best to be as backward compatible as possible moving forward, but I can make no guarantees.
 
-## Dependencies on other Vim Plugins
-
-The default formatting uses [Tabularize](https://github.com/godlygeek/tabular). To put it in your plugin manager, add 
-```vimscript
-Plug 'godlygeek/tabular'
-```
-
-## Dependencies on Python
-
-Please compile Vim with python3 for this plugin to function properly.
-
-Then install the `requirements.txt` file with pip.
-
-## Please leave Feedback
+## Please Leave Feedback
 
 If you do indeed try this plugin, please please please leave some feedback. I'm not the most experienced programmer, so if you have **any** comment or suggestion, either open an issue or send me an email at leonardthesalmon@protonmail.com. I will read all of your feedback (I promise).
 
