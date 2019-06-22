@@ -13,7 +13,7 @@ python3 import python.util.pip_check
 
 " Check that Tabularize command from Tabular is available
 if !exists(":Tabularize")
-    set runtimepath += expand("<sfile>:p:h") . "../tabular/"
+    let &runtimepath .= expand("<sfile>:p:h") . "../tabular/"
 endif
 
 " Check that credential variables are set
