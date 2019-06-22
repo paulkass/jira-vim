@@ -12,14 +12,12 @@ before_script: |
   pip --version
   pip list
   git clone https://github.com/junegunn/vader.vim.git
-  git clone https://github.com/godlygeek/tabular.git
 
 script: |
     vim -Nu <(cat <<EOF
     let jiraVimDomainName = "jira-vim"
     let jiraVimEmail = "burner.a5c67606@tryninja.io"
     let jiraVimToken = "9kAJ0LfQihsVjZ8cfM8eED55" 
-    set rtp+=tabular
     set rtp+=vader.vim
     set rtp+=.
     filetype plugin on
