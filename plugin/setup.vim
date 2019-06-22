@@ -13,7 +13,13 @@ python3 import python.util.pip_check
 
 " Check that Tabularize command from Tabular is available
 if !exists(":Tabularize")
-    let &runtimepath .= expand("<sfile>:p:h") . "../tabular/"
+    execute "source " expand("<sfile>:p:h") . "/../tabular/plugin/Tabular.vim"
+    execute "source " expand("<sfile>:p:h") . "/../tabular/autoload/tabular.vim"
+    execute "source " expand("<sfile>:p:h") . "/../tabular/after/plugin/TabularMaps.vim"
+
+    if !exists(":Tabularize")
+        throw "Couldn't install Tabularize for some reason. Please contact the owner of this project for assistance"
+    endif
 endif
 
 " Check that credential variables are set
