@@ -1,14 +1,12 @@
 
 import os
 import pkg_resources
-import vim
-from pkg_resources import DistributionNotFound, VersionConflict, ContextualVersionConflict 
 
 ###
-# This was obtained from https://stackoverflow.com/questions/16294819/check-if-my-python-has-all-required-packages 
+# This was obtained from https://stackoverflow.com/questions/16294819/check-if-my-python-has-all-required-packages
 ###
 
-# dependencies can be any iterable with strings, 
+# dependencies can be any iterable with strings,
 # e.g. file line-by-line iterator
 dependencies = []
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -20,7 +18,7 @@ with open(dir_path + "/../../requirements.txt", 'rb') as f:
             dependencies += [requirement]
 
 # here, if a dependency is not met, a DistributionNotFound or VersionConflict
-# exception is thrown. 
+# exception is thrown.
 for dependency in dependencies:
     try:
         pkg_resources.require(dependency)
