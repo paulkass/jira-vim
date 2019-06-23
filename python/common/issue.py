@@ -9,7 +9,12 @@ class Issue:
         self.fields = self.obj.fields
         self.issueId = self.obj.id
 
+        # These fields will be displayed in normal category style on issue views
         self.displayFields = ["summary", "description"]
+
+        # These fields will be displayed in the Basic Information section
+        self.basicInfo = ["status", "reporter", "assignee"]
+        print(self.obj.fields.__dict__)
 
     def getField(self, field):
         """
@@ -28,5 +33,5 @@ class Issue:
             String that represents value of the field of this particular issue.
 
         """
-        return self.fields.__dict__.get(field)
+        return str(self.fields.__dict__.get(field))
 

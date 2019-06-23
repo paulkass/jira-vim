@@ -213,14 +213,18 @@ class DrawUtil():
             maxSummLen = max([lenSumm, maxSummLen])
         endLine = line-1
 
+        vim.command("normal! %dG" % endLine)
+
+        formatter(startLine, endLine, maxKeyLen, maxSummLen, window_width)
+
+        line = int(vim.eval("line(\".\")")) + 1 
+
         if more:
             line = DrawUtil.draw_more(buf, line)
 
         # append an empty line at the end
         buf.append("", line-1)
-
-        formatter(startLine, endLine, maxKeyLen, maxSummLen, window_width)
-        return line
+        return line + 1
 
     @staticmethod
     def draw_items(buf, obj, sessionStorage, line=None, itemExtractor=None, withCategoryHeaders=True):
