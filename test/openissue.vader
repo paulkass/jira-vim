@@ -15,11 +15,11 @@ Then (Expect header to appear and a description):
   AssertNotEqual -1, match(getline("."), '\v^\=+$'), "No Underlining found for header"
 
   let b:curLine = line(".") 
-  /\v^Summary: .+$
+  /\v\c^Summary
   AssertNotEqual b:curLine, line("."), "No Summary section found"
 
-  let b:curLine = line(".") 
-  /\v^Description: .+$
+  let b:curLine = line(".")
+  /\v\c^Description
   AssertNotEqual b:curLine, line("."), "No Description section found"
 
     

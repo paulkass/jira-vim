@@ -142,16 +142,10 @@ class DrawUtil():
             line += 1
         endLine = line-1
 
-        vim.command("normal! %dG" % startLine)
-        vim.command("normal! %dgqq" % (endLine - startLine + 1))
-
-        # I know that the previous command should end up on this line, but this is just for clarity
-        vim.command("normal! %dG" % endLine)
-
         return line, len(key), len(summ)
 
     @staticmethod
-    def draw_category(buf, obj, category, line=None, more=False, formatter=None, with_header=True):
+    def draw_category(buf, obj, category, line=None, more=False, formatter=None, with_header=True, str_generator=None):
         """
         Draws a category in the buffer.
 
@@ -180,6 +174,8 @@ class DrawUtil():
             The values of the variables should be self-explanatory. If not defined, it's chosen depending on the type of object, dud function for scrum boards and DrawUtil.ISSUE_FORMATTER otherwise.
         with_header : Boolean (Optional)
             Boolean that specifies if the header of the category should be displayed. True by default.
+        str_generator : Lambda (Optional)
+            Lambda that gets passed in as str_generator field to the draw_item call. Default to None, which in draw_item just adds a space between the key and the summ.
 
         Returns
         -------
@@ -212,7 +208,7 @@ class DrawUtil():
         # Using maxSummLen to clarify that we are measuring the maximum length of the summary
         maxKeyLen, maxSummLen = 0, 0
         for item in items:
-            line, lenKey, lenSumm = DrawUtil.draw_item(buf, item, line=line)
+            line, lenKey, lenSumm = DrawUtil.draw_item(buf, item, line=line, str_generator=str_generator)
             maxKeyLen = max([lenKey, maxKeyLen])
             maxSummLen = max([lenSumm, maxSummLen])
         endLine = line-1
