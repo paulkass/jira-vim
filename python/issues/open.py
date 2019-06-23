@@ -19,7 +19,6 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
     vim.command("set modifiable")
     if new:
         issue = Issue(issueKey, connection)
-        obj = issue.obj
         project = str(issue.getField("project"))
         summary = issue.getField("summary")
         description = issue.getField("description")
@@ -28,11 +27,11 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
 
         line = DrawUtil.draw_header(buf, issue, "%s %s" % (issueKey, project))
 
-        buf.append("Summary: %s" % summary)
-        buf.append("")
-
-        buf.append("Description: %s" % description)
-        buf.append("")
-
+        for field in issue.displayFields:
+            line, _, _ = DrawUtil.draw_item(buf, (field.title(), issue.getField(field)), line=line, str_generator=lambda t: ": ".join(t))
+            buf.append("")
+            buf.append("")
+            line += 2
+            
         vim.command("setl filetype=%s" % filetype)
     vim.command("set nomodifiable")

@@ -105,7 +105,7 @@ class DrawUtil():
         return 3
 
     @staticmethod
-    def draw_item(buf, item, line=None):
+    def draw_item(buf, item, line=None, str_generator=None):
         """
         Draws an item in the buffer.
 
@@ -119,17 +119,36 @@ class DrawUtil():
             Tuple that contains the key and summary of the item
         line : int (Optional)
             Line on which to draw the item. If not specified, appends to the end of the buffer
+        str_generator : Lambda (Optional)
+            This is a lambda that accepts an item and returns a string that is to be printed. The string can contain multiple lines, in which case the text will be printed line by line and then adjusted. If not specified, joins the key and summary in item with spaces.
 
         Returns
         -------
         tuple
-            the length of the key and the length of the summary as a tuple
+            the next line, the length of the key, and the length of the summary as a tuple
 
         """
 
+        if not str_generator:
+            str_generator = lambda t: " ".join(t)
+
         key, summ = item
-        buf.append(key + " " + summ, len(buf)-1 if not line else line-1)
-        return len(key), len(summ)
+        text = str_generator(item) 
+        line = len(buf) if not line else line
+
+        startLine = line
+        for strip in text.split("\r\n"):
+            buf.append(strip, line-1)
+            line += 1
+        endLine = line-1
+
+        vim.command("normal! %dG" % startLine)
+        vim.command("normal! %dgqq" % (endLine - startLine + 1))
+
+        # I know that the previous command should end up on this line, but this is just for clarity
+        vim.command("normal! %dG" % endLine)
+
+        return line, len(key), len(summ)
 
     @staticmethod
     def draw_category(buf, obj, category, line=None, more=False, formatter=None, with_header=True):
@@ -193,8 +212,7 @@ class DrawUtil():
         # Using maxSummLen to clarify that we are measuring the maximum length of the summary
         maxKeyLen, maxSummLen = 0, 0
         for item in items:
-            lenKey, lenSumm = DrawUtil.draw_item(buf, item, line=line)
-            line += 1
+            line, lenKey, lenSumm = DrawUtil.draw_item(buf, item, line=line)
             maxKeyLen = max([lenKey, maxKeyLen])
             maxSummLen = max([lenSumm, maxSummLen])
         endLine = line-1

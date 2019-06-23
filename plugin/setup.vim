@@ -55,4 +55,5 @@ function! JiraVimTrimHelper(string)
     let l:arg = substitute(l:arg, '\v\s+$', "", "")
     return l:arg
 endfunction
+
 "}}}
