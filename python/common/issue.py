@@ -14,9 +14,8 @@ class Issue:
 
         # These fields will be displayed in the Basic Information section
         self.basicInfo = ["status", "reporter", "assignee"]
-        print(self.obj.fields.__dict__)
 
-    def getField(self, field):
+    def getField(self, field, as_str=True):
         """
         Returns the value of the field.
 
@@ -26,6 +25,8 @@ class Issue:
         ----------
         field : String
             A string that specifies the desired field
+        as_str : Boolean (Optional)
+            Specifies whether to return the property in string format. Defaults to True
 
         Returns
         -------
@@ -33,5 +34,25 @@ class Issue:
             String that represents value of the field of this particular issue.
 
         """
-        return str(self.fields.__dict__.get(field))
+        obj = self.fields.__dict__.get(field)
+        return str(obj) if as_str else obj
+
+    def getComments(self):
+        """
+        Returns a list of columns.
+
+        Returns a list of column objects that contain information about the columns.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        Nothing
+
+        """
+
+        comment_obj = self.getField("comment", as_str=False)
+        return comment_obj.comments
 

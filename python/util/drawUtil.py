@@ -137,7 +137,7 @@ class DrawUtil():
         line = len(buf) if not line else line
 
         startLine = line
-        for strip in text.split("\r\n"):
+        for strip in text.splitlines():
             buf.append(strip, line-1)
             line += 1
         endLine = line-1
