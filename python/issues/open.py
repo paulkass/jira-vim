@@ -30,7 +30,7 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
         buf.append(issue_type, 2)
 
         basic_info_category = ("Basic Information", [(field.title(), issue.getField(field)) for field in issue.basicInfo])
-        line = DrawUtil.draw_category(buf, issue, basic_info_category, line=line, str_generator=lambda i: ': '.join(i)) + 1
+        line = DrawUtil.draw_category(buf, issue, basic_info_category, line=line, str_generator=': '.join) + 1
         buf.append("")
 
         def formatter(startLine, endLine, *args):
@@ -40,7 +40,7 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
 
         categories = [(field.title(), [("", issue.getField(field))]) for field in issue.displayFields]
         for c in categories:
-            line = DrawUtil.draw_category(buf, issue, c, line=line, formatter=formatter, str_generator=lambda item: ''.join(item)) + 1
+            line = DrawUtil.draw_category(buf, issue, c, line=line, formatter=formatter, str_generator=''.join) + 1
             buf.append("")
 
         comments = issue.getComments()
@@ -54,7 +54,7 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
                 vim.command("silent exe \'/\' . b:commentPattern")
             return vim.current.window.cursor[0]
 
-        line = DrawUtil.draw_category(buf, issue, comments, line=line, formatter=comment_formatter, str_generator=lambda i: ": ".join(i))
+        line = DrawUtil.draw_category(buf, issue, comments, line=line, formatter=comment_formatter, str_generator=": ".join)
 
     vim.command("set nomodifiable")
     vim.command("normal! gg")

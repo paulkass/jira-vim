@@ -18,7 +18,9 @@ class DrawUtil():
         "issue": Issue
         })
     RESERVED_KEYWORDS = ["default", "obj"]
-    def ISSUE_FORMATTER(startLine, endLine, maxKeyLen, maxSumLen, textWidth): 
+
+    @staticmethod
+    def ISSUE_FORMATTER(startLine, endLine, maxKeyLen, maxSumLen, textWidth):
         vim.command("%d,%dTabularize /\\u\+-\d\+\s/r0l%dr0" % (startLine, endLine, textWidth-maxKeyLen-maxSumLen-7))
         return endLine
 
@@ -96,7 +98,7 @@ class DrawUtil():
                 default=lambda w: w,
                 issue=lambda w: vim.command("1Tabularize /\\u\+-\d\+\s/r0c%dr0" % (text_width-len(name)-7)),
                 obj=obj
-                ) 
+                )
 
         buf[0] = name + (" %s" % postfix)
         buf.append("="*(len(name)+7))
@@ -132,7 +134,7 @@ class DrawUtil():
         """
 
         if not str_generator:
-            str_generator = lambda t: " ".join(t)
+            str_generator = " ".join
 
         key, summ = item
         text = str_generator(item)
