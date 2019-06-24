@@ -11,14 +11,17 @@ class Board:
 
         self.boardConf = self.connection.customRequest(self.baseUrl+"/configuration").json()
         self.statusToColumn = {}
-        self.columns = set()
+        self.columns = list()
 
         """
         The idea here is that each column can display many statuses. So the relationship from status to column is many to one. Then each instance sorts issues into columns on its own.
         """
+        col_set = set()
         for col in self.boardConf["columnConfig"]["columns"]:
             cName = col["name"]
-            self.columns.add(cName)
+            if cName not in col_set:
+                self.columns.append(cName)
+                col_set.add(cName)
             for s in col["statuses"]:
                 self.statusToColumn[s["id"]] = cName
 

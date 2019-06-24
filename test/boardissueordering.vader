@@ -1,0 +1,17 @@
+
+Execute (Open the test board):
+  JiraVimBoardOpen TEST
+
+Then (Test Order):
+  Assert getline(1) ==# "TEST board", "No header found" 
+  Assert getline(2) ==# "===========", "No underlining found"
+
+  /BACKLOG
+  normal! 3j
+
+  while getline(".") !~? '\v---MORE---'
+    let b:thisIssue = substitute(matchstr(getline("."), '\v^\u+-\d+'), '\v^\u+-', "", '')
+    let b:prevIssue = substitute(matchstr(getline(line(".")-1), '\v^\u+-\d+'), '\v^\u+-', "", '')    
+    Assert str2nr(b:prevIssue) < str2nr(b:thisIssue), "Bad ordering or Issues"
+    normal! j
+  endwhile

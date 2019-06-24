@@ -1,0 +1,23 @@
+
+Execute (Open the test board):
+  JiraVimBoardOpen TEST
+
+Then (Test Order):
+  Assert getline(1) ==# "TEST board", "No header found" 
+  Assert getline(2) ==# "===========", "No underlining found"
+
+  /BACKLOG
+  let b:backlogLine = line(".")
+
+  /SELECTED\ FOR\ DEVELOPMENT
+  let b:developmentLine = line(".")
+
+  /IN\ PROGRESS
+  let b:progressLine = line(".")
+
+  /DONE
+  let b:doneLine = line(".")
+
+  Assert b:backlogLine < b:developmentLine, "Bad ordering"
+  Assert b:developmentLine < b:progressLine, "Bad ordering" 
+  Assert b:progressLine < b:doneLine, "Bad ordering" 
