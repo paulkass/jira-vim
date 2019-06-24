@@ -1,0 +1,31 @@
+
+Execute (Open issue TEST-16):
+  JiraVimIssueOpen TEST-16
+  sleep 1
+
+Then (Make sure it's a real issue and check that the text width is smaller than textwidth):
+  normal! gg
+  AssertNotEqual -1, match(getline("."), '\v^(\u+)-\d+\s+\1$'), "No Header found"
+  normal! j
+  AssertNotEqual -1, match(getline("."), '\v^\=+$'), "No Underlining found for header"
+
+  let b:curLine = line(".") 
+  /\v\c^Summary
+  AssertNotEqual b:curLine, line("."), "No Summary section found"
+
+  let b:curLine = line(".")
+  /\v\c^Description
+  AssertNotEqual b:curLine, line("."), "No Description section found"
+
+  let b:tw = &textwidth  
+  if b:tw == 0
+    " Default for auto-formatting if textwidth is set to 0
+    let b:tw = 79
+  endif
+
+  while line(".") < line("$")
+    Assert strlen(getline(".")) <= b:tw
+    normal! j 
+  endwhile
+
+  Assert strlen(getline(".")) <= b:tw

@@ -1,8 +1,7 @@
 
 import sys
-import re
+from datetime import datetime
 import vim
-from datetime import date, datetime
 from ..common.issue import Issue
 from ..util.drawUtil import DrawUtil
 
@@ -42,7 +41,7 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
         categories = [(field.title(), [("", issue.getField(field))]) for field in issue.displayFields]
         for c in categories:
             line = DrawUtil.draw_category(buf, issue, c, line=line, formatter=formatter, str_generator=lambda item: ''.join(item)) + 1
-            buf.append("") 
+            buf.append("")
 
         comments = issue.getComments()
         # This is just a very long way of formatting each comment as <author> <date>: <body>
@@ -51,15 +50,11 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
         def comment_formatter(startLine, endLine, *args):
             vim.command("normal! %dG" % startLine)
             for _ in range(len(comments[1])):
-                vim.command("normal gqncc")
-                print(vim.current.window.cursor)
-                vim.command("execute \'/\' . b:commentPattern")
-                vim.command("normal! n")
+                vim.command("silent exe \"normal gqncc\"")
+                vim.command("silent exe \'/\' . b:commentPattern")
             return vim.current.window.cursor[0]
-            #return endLine
-            
+
         line = DrawUtil.draw_category(buf, issue, comments, line=line, formatter=comment_formatter, str_generator=lambda i: ": ".join(i))
-        
-    # TODO: Revert to normal after testing
-    #vim.command("set nomodifiable")
-    vim.command("normal! GG")
+
+    vim.command("set nomodifiable")
+    vim.command("normal! gg")

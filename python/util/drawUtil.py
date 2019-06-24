@@ -135,14 +135,12 @@ class DrawUtil():
             str_generator = lambda t: " ".join(t)
 
         key, summ = item
-        text = str_generator(item) 
-        line = len(buf) if not line else line
+        text = str_generator(item)
+        line = len(buf)+1 if not line else line
 
-        startLine = line
         for strip in text.splitlines():
             buf.append(strip, line-1)
             line += 1
-        endLine = line-1
 
         return line, len(key), len(summ)
 
@@ -219,13 +217,12 @@ class DrawUtil():
         vim.command("normal! %dG" % endLine)
 
         endLine = formatter(startLine, endLine, maxKeyLen, maxSummLen, window_width)
+        line = endLine+1
 
         if more:
             line = DrawUtil.draw_more(buf, line)
 
-        # append an empty line at the end
-        buf.append("", line-1)
-        return line + 1
+        return line
 
     @staticmethod
     def draw_items(buf, obj, sessionStorage, line=None, itemExtractor=None, withCategoryHeaders=True):
@@ -283,6 +280,7 @@ class DrawUtil():
             more = cat[1]
             item_list = (cat[0], cat[2])
             line = DrawUtil.draw_category(buf, obj, item_list, line, more=more, with_header=withCategoryHeaders) + 1
+            buf.append("", line-2)
         return line
 
     @staticmethod
