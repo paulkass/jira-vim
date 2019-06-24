@@ -30,6 +30,6 @@ class ItemCategorizer():
             statusId = i["fields"]["status"]["id"]
             column = statusToColumn[statusId]
             if column not in columnToIssues:
-                columnToIssues[column] = set()
-            columnToIssues[column].add(key)
-        return [(a, not columnExtractors[a].finished, list(b)) for a, b in columnToIssues.items() if len(b) > 0]
+                columnToIssues[column] = list()
+            columnToIssues[column].append(key)
+        return [(a, not columnExtractors[a].finished, b) for a, b in columnToIssues.items() if len(b) > 0]
