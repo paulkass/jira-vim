@@ -1,7 +1,7 @@
 
-let s:python_dir = expand("<sfile>:p:h") . "/"
+let s:script_dir = expand("<sfile>:p:h") . "/"
 execute "python3 import sys"
-execute "python3 sys.path.append('" . s:python_dir . "../')"
+execute "python3 sys.path.append('" . s:script_dir . "../')"
 
 " Make sure that all the necessary parts are in place {{{
 if !has('python3')
@@ -14,15 +14,17 @@ python3 import python.util.pip_check
 " Install Tabular submodule
 silent let s:gitOutput = system("git")
 if !matchstr(s:gitOutput, '\vgit:\ command\ not\ found')
-    silent call system("git submodule init " . expand("<sfile>") . "/../tabular")
-    silent call system("git submodule update " . expand("<sfile>") . "/../tabular")
+    silent call system("git submodule init " . s:script_dir . "../tabular")
+    silent call system("git submodule update " . s:script_dir . "../tabular")
 endif
 
 " Check that Tabularize command from Tabular is available
 if !exists(":Tabularize")
-    execute "source " expand("<sfile>:p:h") . "/../tabular/plugin/Tabular.vim"
-    execute "source " expand("<sfile>:p:h") . "/../tabular/autoload/tabular.vim"
-    execute "source " expand("<sfile>:p:h") . "/../tabular/after/plugin/TabularMaps.vim"
+    " The dot between script_dir and the rest of the path is avoid a space in
+    " the path definition
+    execute "source" s:script_dir . "../tabular/plugin/Tabular.vim"
+    execute "source" s:script_dir . "../tabular/autoload/tabular.vim"
+    execute "source" s:script_dir . "../tabular/after/plugin/TabularMaps.vim"
 
     if !exists(":Tabularize")
         throw "Couldn't install Tabularize for some reason. Please contact the owner of this project for assistance"
