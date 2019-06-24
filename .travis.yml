@@ -12,6 +12,8 @@ before_script: |
   pip --version
   pip list
   git clone https://github.com/junegunn/vader.vim.git
+  #git submodule init tabular
+  #git submodule update
 
 script: |
     vim -Nu <(cat <<EOF

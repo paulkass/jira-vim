@@ -11,6 +11,13 @@ endif
 " Check that all pip dependencies are installed
 python3 import python.util.pip_check
 
+" Install Tabular submodule
+silent let s:gitOutput = system("git")
+if !matchstr(s:gitOutput, '\vgit:\ command\ not\ found')
+    silent call system("git submodule init " . expand("<sfile>") . "/../tabular")
+    silent call system("git submodule update " . expand("<sfile>") . "/../tabular")
+endif
+
 " Check that Tabularize command from Tabular is available
 if !exists(":Tabularize")
     execute "source " expand("<sfile>:p:h") . "/../tabular/plugin/Tabular.vim"
