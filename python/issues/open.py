@@ -1,7 +1,9 @@
 
 import sys
+from datetime import datetime
 import vim
 from ..common.issue import Issue
+from ..util.drawUtil import DrawUtil
 
 # Arguments are expected through sys.argv
 def JiraVimIssueOpen(sessionStorage, isSplit=False):
@@ -16,27 +18,43 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
     else:
         vim.command("buffer "+str(buf.number))
     vim.command("set modifiable")
+    vim.command("setl filetype=%s" % filetype)
     if new:
-        textWidth = vim.current.window.width
         issue = Issue(issueKey, connection)
-        obj = issue.obj
-        project = str(obj.fields.project)
-        summary = obj.fields.summary
-        description = obj.fields.description
+        project = str(issue.getField("project"))
+        issue_type = str(issue.getField("issuetype"))
 
         sessionStorage.assignIssue(issue, buf)
 
-        # For now, assume that the this is command is called from an already opened board window
-        buf[0] = "%s %s" % (issueKey, project)
-        vim.command("Tabularize /\\u\+-\d\+\s/r0c%dr0" % (textWidth-len(issueKey)-len(project)-7))
-        buf.append("="*len(issueKey))
+        line = DrawUtil.draw_header(buf, issue, "%s %s" % (issueKey, project)) + 2
+        buf.append(issue_type, 2)
+
+        basic_info_category = ("Basic Information", [(field.title(), issue.getField(field)) for field in issue.basicInfo])
+        line = DrawUtil.draw_category(buf, issue, basic_info_category, line=line, str_generator=': '.join) + 1
         buf.append("")
 
-        buf.append("Summary: %s" % summary)
-        buf.append("")
+        def formatter(startLine, endLine, *args):
+            vim.command("normal! %dG" % startLine)
+            vim.command("normal! %dgqq" % (endLine - startLine + 1))
+            return vim.current.window.cursor[0]
 
-        buf.append("Description: %s" % description)
-        buf.append("")
+        categories = [(field.title(), [("", issue.getField(field))]) for field in issue.displayFields]
+        for c in categories:
+            line = DrawUtil.draw_category(buf, issue, c, line=line, formatter=formatter, str_generator=''.join) + 1
+            buf.append("")
 
-        vim.command("setl filetype=%s" % filetype)
+        comments = issue.getComments()
+        # This is just a very long way of formatting each comment as <author> <date>: <body>
+        comments = ("Comments", [(str(c.author) + "[" + str(c.author.name) + "] " + datetime.strptime(c.created, "%Y-%m-%dT%H:%M:%S.%f%z").strftime("%c"), c.body) for c in comments])
+
+        def comment_formatter(startLine, endLine, *args):
+            vim.command("normal! %dG" % startLine)
+            for _ in range(len(comments[1])):
+                vim.command("silent exe \"normal gqncc\"")
+                vim.command("silent exe \'/\' . b:commentPattern")
+            return vim.current.window.cursor[0]
+
+        line = DrawUtil.draw_category(buf, issue, comments, line=line, formatter=comment_formatter, str_generator=": ".join)
+
     vim.command("set nomodifiable")
+    vim.command("normal! gg")

@@ -51,8 +51,8 @@ class SessionObject():
         self.__sprintsHash[buff.number] = sprint
 
     def assignIssue(self, issue, buff):
-        self.__bufferHash[issue.id] = buff
-        self.__namesToIds[issue.issueKey] = issue.id
+        self.__bufferHash[issue.issueId] = buff
+        self.__namesToIds[issue.issueKey] = issue.issueId
 
     def getBufferByIndex(self, key):
         if key in self.__bufferHash:

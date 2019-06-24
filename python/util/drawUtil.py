@@ -18,7 +18,11 @@ class DrawUtil():
         "issue": Issue
         })
     RESERVED_KEYWORDS = ["default", "obj"]
-    ISSUE_FORMATTER = lambda startLine, endLine, maxKeyLen, maxSumLen, textWidth: vim.command("%d,%dTabularize /\\u\+-\d\+\s/r0l%dr0" % (startLine, endLine, textWidth-maxKeyLen-maxSumLen-7))
+
+    @staticmethod
+    def ISSUE_FORMATTER(startLine, endLine, maxKeyLen, maxSumLen, textWidth):
+        vim.command("%d,%dTabularize /\\u\+-\d\+\s/r0l%dr0" % (startLine, endLine, textWidth-maxKeyLen-maxSumLen-7))
+        return endLine
 
     @staticmethod
     def __type_selector(**args):
@@ -58,7 +62,7 @@ class DrawUtil():
         return args.get("default", None)
 
     @staticmethod
-    def draw_header(buf, obj, name):
+    def draw_header(buf, obj, name, formatting=None):
         """
         Draw the header for object.
 
@@ -70,6 +74,8 @@ class DrawUtil():
             The object to examine
         name : String
             The name of the object to be written.
+        formatting : Lambda (Optional)
+            Specifies the formatting of the first title line. If not specified, defaults to a tabular formatting for issues and a dud (no formatting) for the rest. The lambda accepts one argument, the text width for the window.
 
         Returns
         -------
@@ -78,19 +84,32 @@ class DrawUtil():
 
         """
 
+        text_width = vim.current.window.width
+
         postfix = DrawUtil.__type_selector(
             board="board",
             sprint="sprint",
+            issue="",
             obj=obj
             )
+
+        if not formatting:
+            formatting = DrawUtil.__type_selector(
+                default=lambda w: w,
+                issue=lambda w: vim.command("1Tabularize /\\u\+-\d\+\s/r0c%dr0" % (text_width-len(name)-7)),
+                obj=obj
+                )
 
         buf[0] = name + (" %s" % postfix)
         buf.append("="*(len(name)+7))
         buf.append("")
+
+        formatting(text_width)
+
         return 3
 
     @staticmethod
-    def draw_item(buf, item, line=None):
+    def draw_item(buf, item, line=None, str_generator=None):
         """
         Draws an item in the buffer.
 
@@ -104,20 +123,31 @@ class DrawUtil():
             Tuple that contains the key and summary of the item
         line : int (Optional)
             Line on which to draw the item. If not specified, appends to the end of the buffer
+        str_generator : Lambda (Optional)
+            This is a lambda that accepts an item and returns a string that is to be printed. The string can contain multiple lines, in which case the text will be printed line by line and then adjusted. If not specified, joins the key and summary in item with spaces.
 
         Returns
         -------
         tuple
-            the length of the key and the length of the summary as a tuple
+            the next line, the length of the key, and the length of the summary as a tuple
 
         """
 
+        if not str_generator:
+            str_generator = " ".join
+
         key, summ = item
-        buf.append(key + " " + summ, len(buf)-1 if not line else line-1)
-        return len(key), len(summ)
+        text = str_generator(item)
+        line = len(buf)+1 if not line else line
+
+        for strip in text.splitlines():
+            buf.append(strip, line-1)
+            line += 1
+
+        return line, len(key), len(summ)
 
     @staticmethod
-    def draw_category(buf, obj, category, line=None, more=False, formatter=None, with_header=True):
+    def draw_category(buf, obj, category, line=None, more=False, formatter=None, with_header=True, str_generator=None):
         """
         Draws a category in the buffer.
 
@@ -143,9 +173,12 @@ class DrawUtil():
                 maxSummLen,
                 window_width
                 )
+            Lambda returns the position of the endLine (since it might be changed through formatting).
             The values of the variables should be self-explanatory. If not defined, it's chosen depending on the type of object, dud function for scrum boards and DrawUtil.ISSUE_FORMATTER otherwise.
         with_header : Boolean (Optional)
             Boolean that specifies if the header of the category should be displayed. True by default.
+        str_generator : Lambda (Optional)
+            Lambda that gets passed in as str_generator field to the draw_item call. Default to None, which in draw_item just adds a space between the key and the summ.
 
         Returns
         -------
@@ -159,7 +192,8 @@ class DrawUtil():
         # No formatting for the scrum board
         formatter = formatter if formatter else DrawUtil.__type_selector(
             obj=obj,
-            scrum=lambda a, b, c, d, e: a,
+            scrum=lambda a, b, c, d, e: b,
+            issue=lambda a, b, c, d, e: b,
             default=DrawUtil.ISSUE_FORMATTER
             )
 
@@ -177,19 +211,19 @@ class DrawUtil():
         # Using maxSummLen to clarify that we are measuring the maximum length of the summary
         maxKeyLen, maxSummLen = 0, 0
         for item in items:
-            lenKey, lenSumm = DrawUtil.draw_item(buf, item, line=line)
-            line += 1
+            line, lenKey, lenSumm = DrawUtil.draw_item(buf, item, line=line, str_generator=str_generator)
             maxKeyLen = max([lenKey, maxKeyLen])
             maxSummLen = max([lenSumm, maxSummLen])
         endLine = line-1
 
+        vim.command("normal! %dG" % endLine)
+
+        endLine = formatter(startLine, endLine, maxKeyLen, maxSummLen, window_width)
+        line = endLine+1
+
         if more:
             line = DrawUtil.draw_more(buf, line)
 
-        # append an empty line at the end
-        buf.append("", line-1)
-
-        formatter(startLine, endLine, maxKeyLen, maxSummLen, window_width)
         return line
 
     @staticmethod
@@ -248,6 +282,7 @@ class DrawUtil():
             more = cat[1]
             item_list = (cat[0], cat[2])
             line = DrawUtil.draw_category(buf, obj, item_list, line, more=more, with_header=withCategoryHeaders) + 1
+            buf.append("", line-2)
         return line
 
     @staticmethod

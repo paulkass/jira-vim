@@ -105,7 +105,15 @@ https://confluence.atlassian.com/cloud/api-tokens-938839638.html
 That should be it! 
 
                                                      *jiravim-tabular-install*
-[If the normal plugin doens't include this] 
+[If the normal plugin doens't include this or you have problems importing the
+tabular submodule]
+Install Tabular with git submodules: Put these commands in the home directory
+in the terminal: >
+    git submodule init tabular
+    git submodule update
+This should install the tabular submodule and it will be imported
+automatically by the plugin. If that doesn't work either ...
+
 Install Tabular: Use your favorite plugin manager to install the Tabular plugin
 located at https://github.com/godlygeek/tabular. For Vim-Plug, put >
     Plug 'godlygeek/tabular'
