@@ -18,7 +18,9 @@ class DrawUtil():
         "issue": Issue
         })
     RESERVED_KEYWORDS = ["default", "obj"]
-    ISSUE_FORMATTER = lambda startLine, endLine, maxKeyLen, maxSumLen, textWidth: vim.command("%d,%dTabularize /\\u\+-\d\+\s/r0l%dr0" % (startLine, endLine, textWidth-maxKeyLen-maxSumLen-7))
+    def ISSUE_FORMATTER(startLine, endLine, maxKeyLen, maxSumLen, textWidth): 
+        vim.command("%d,%dTabularize /\\u\+-\d\+\s/r0l%dr0" % (startLine, endLine, textWidth-maxKeyLen-maxSumLen-7))
+        return endLine
 
     @staticmethod
     def __type_selector(**args):
@@ -171,6 +173,7 @@ class DrawUtil():
                 maxSummLen,
                 window_width
                 )
+            Lambda returns the position of the endLine (since it might be changed through formatting).
             The values of the variables should be self-explanatory. If not defined, it's chosen depending on the type of object, dud function for scrum boards and DrawUtil.ISSUE_FORMATTER otherwise.
         with_header : Boolean (Optional)
             Boolean that specifies if the header of the category should be displayed. True by default.
@@ -189,8 +192,8 @@ class DrawUtil():
         # No formatting for the scrum board
         formatter = formatter if formatter else DrawUtil.__type_selector(
             obj=obj,
-            scrum=lambda a, b, c, d, e: a,
-            issue=lambda a, b, c, d, e: a,
+            scrum=lambda a, b, c, d, e: b,
+            issue=lambda a, b, c, d, e: b,
             default=DrawUtil.ISSUE_FORMATTER
             )
 
@@ -215,9 +218,7 @@ class DrawUtil():
 
         vim.command("normal! %dG" % endLine)
 
-        formatter(startLine, endLine, maxKeyLen, maxSummLen, window_width)
-
-        line = int(vim.eval("line(\".\")")) + 1 
+        endLine = formatter(startLine, endLine, maxKeyLen, maxSummLen, window_width)
 
         if more:
             line = DrawUtil.draw_more(buf, line)

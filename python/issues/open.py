@@ -1,5 +1,6 @@
 
 import sys
+import re
 import vim
 from datetime import date, datetime
 from ..common.issue import Issue
@@ -18,6 +19,7 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
     else:
         vim.command("buffer "+str(buf.number))
     vim.command("set modifiable")
+    vim.command("setl filetype=%s" % filetype)
     if new:
         issue = Issue(issueKey, connection)
         project = str(issue.getField("project"))
@@ -35,6 +37,7 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
         def formatter(startLine, endLine, *args):
             vim.command("normal! %dG" % startLine)
             vim.command("normal! %dgqq" % (endLine - startLine + 1))
+            return vim.current.window.cursor[0]
 
         categories = [(field.title(), [("", issue.getField(field))]) for field in issue.displayFields]
         for c in categories:
@@ -42,10 +45,21 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
             buf.append("") 
 
         comments = issue.getComments()
-        #def comment_formatter(startLine, endLine, *args):
         # This is just a very long way of formatting each comment as <author> <date>: <body>
         comments = ("Comments", [(str(c.author) + "[" + str(c.author.name) + "] " + datetime.strptime(c.created, "%Y-%m-%dT%H:%M:%S.%f%z").strftime("%c"), c.body) for c in comments])
-        line = DrawUtil.draw_category(buf, issue, comments, line=line, str_generator=lambda i: ": ".join(i))
+
+        def comment_formatter(startLine, endLine, *args):
+            vim.command("normal! %dG" % startLine)
+            for _ in range(len(comments[1])):
+                vim.command("normal gqncc")
+                print(vim.current.window.cursor)
+                vim.command("execute \'/\' . b:commentPattern")
+                vim.command("normal! n")
+            return vim.current.window.cursor[0]
+            #return endLine
+            
+        line = DrawUtil.draw_category(buf, issue, comments, line=line, formatter=comment_formatter, str_generator=lambda i: ": ".join(i))
         
-        vim.command("setl filetype=%s" % filetype)
-    vim.command("set nomodifiable")
+    # TODO: Revert to normal after testing
+    #vim.command("set nomodifiable")
+    vim.command("normal! GG")
