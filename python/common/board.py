@@ -27,7 +27,22 @@ class Board:
 
         self.issueExtractor = ItemExtractor(self.connection, self.baseUrl+"/issue?fields=%s", lambda: (','.join(self.requiredProperties),))
 
-    def getIssues(self, column=None):
+    def getIssues(self):
+        """
+        Creates an category for all issues.
+
+        Uses the built in issueExtractor object to extract all issues into a single "All Issues" category and return them.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        List
+            A list with a single tuple of the format ("All Issues", <whether all issues extractor is finished>, [list of (issue key, issue summary) tuples]).
+
+        """
+
         r = self.issueExtractor.__next__()
-        categoryName = "All Issues"
-        return [(categoryName, self.issueExtractor.finished, [(i["key"], "") for i in r["issues"]])]
+        return [("All Issues", self.issueExtractor.finished, [(i["key"], "") for i in r["issues"]])]

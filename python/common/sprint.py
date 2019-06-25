@@ -18,8 +18,24 @@ class Sprint():
         for col in self.board.columns:
             self.columnExtractors[col] = ItemExtractor.create_column_issue_extractor(self.board, col)
 
-
     def getIssues(self, column=None):
+        """
+        Get issues for the sprint.
+
+        Similar to the KanbanBoard issue extraction.
+
+        Parameters
+        ----------
+        column : String (Optional)
+            Column name of the column from which issues should be extracted.
+
+        Returns
+        -------
+        List
+            List in the standard extration formula of issues in a certain column in the sprint.
+
+        """
+
         if column:
             columns = [column]
         else:

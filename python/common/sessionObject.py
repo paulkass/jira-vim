@@ -17,6 +17,22 @@ class SessionObject():
 
     @staticmethod
     def getConnectionFromVars():
+        """
+        Create connection from vars.
+
+        Creates a connection from the global configuration variables and returns it
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        Connection
+            The connection object created from the global variables.
+
+        """
+
         domainName = vim.vars["jiraVimDomainName"].decode("utf-8")
         email = vim.vars["jiraVimEmail"].decode("utf-8")
         token = vim.vars["jiraVimToken"].decode("utf-8")
@@ -55,14 +71,30 @@ class SessionObject():
         self.__namesToIds[issue.issueKey] = issue.issueId
 
     def getBufferByIndex(self, key):
+        """
+        Return buffer based on either item key or item name.
+
+        Returns the buffer from the key or item name of the item you need the buffer for, and returns the buffer if the buffer is valid.
+
+        Parameters
+        ----------
+        key : int or String
+            Either the Id or the Name of the object
+
+        Returns
+        -------
+        Buffer
+            Buffer corresponding to the object
+
+        """
+
         if key in self.__bufferHash:
             buff = self.__bufferHash[key]
             return buff if buff.valid else None
-        elif key in self.__namesToIds:
+        if key in self.__namesToIds:
             buff = self.__bufferHash[self.__namesToIds[key]]
             return buff if buff.valid else None
-        else:
-            return None
+        return None
 
     def getBoard(self, boardIdentifier, boardName=None):
         """
@@ -113,12 +145,32 @@ class SessionObject():
             self.assignSprint(sprint, vim.buffers[sprintIdentifier])
         return sprint
 
-    # Returns the buffer, and a boolean that says whether the buffer is newly created or existing one
-    def getBuff(self, objId=None, objName=None, createNew=True, isSplit=False):
+    def getBuff(self, objId=None, objName=None, createNew=True):
+        """
+        Creates a buffer if none exists for a given object ID or Name
+
+        Tries to return a buffer based on the objId and objName fields, and if there is none, creates a new buffer for the object.
+
+        Parameters
+        ----------
+        objId : Integer (Optional)
+            Id of object.
+        objName : String (Optional)
+            Name of object
+        createNew : Boolean (Optional)
+            Determines whether to create a new buffer if the buffer for the object is not found in the hashes. Defaults to True
+
+        Returns
+        -------
+        Tuple
+            Returns a tuple that contains the Buffer, and a boolean. The boolean is True is this a newly created buffer, created by this method.
+
+        """
+
         if objId is not None:
             buff = self.getBufferByIndex(objId)
             if buff is not None:
-                return ( buff, False )
+                return (buff, False)
         if objName is not None:
             buff = self.getBufferByIndex(objName)
             if buff is not None:
@@ -126,8 +178,7 @@ class SessionObject():
         # return new buffer
         if createNew:
             return (self.__createBuffer(), True)
-        else:
-            return (None, False)
+        return (None, False)
 
     def __createBuffer(self):
         # Creates a new buffer, saves it, and then uses the hidden command to hide it
