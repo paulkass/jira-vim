@@ -16,11 +16,30 @@ class Connection:
         self.__jira = JIRA(options={"server": self.__baseUrl}, basic_auth=(self.__email, self.__token))
         self.__buildBoardHash()
 
-    def __constructUrl(self, name):
+    def __constructUrl(self, site):
         """
-        Simple helper method that takes the name of the domain and generates the baseUrl
+        Constructs a base url from user input.
+
+        This function is designed to take the user input and self-assign the __baseUrl variable with the base URL for any further requests. It supports naming the jira instance (so if you have a jira instance of antarctica.atlassian.net, you could input "atlassian") as well as full websites.
+
+        Parameters
+        ----------
+        site : String
+            A string that represents the connection host. It could either be a name (as explained above, "antarctica" is a valid site input for "antartica.atlassian.net") or a full website.
+
+        Returns
+        -------
+        Nothing
+
         """
-        self.__baseUrl = "http://"+name+".atlassian.net"
+
+        # Pattern experiments at: https://pythex.org/?regex=%5CA(http(s)%3F%3A%2F%2F)%3F%5B%5Cw%5C%24%5C-%5C_%5C.%5C%2B%5C!%5C*%5C%27%5C(%5C)%5C%2C%5D%2B%5C.%5Cw%7B2%2C3%7D%5CZ&test_string=https%3A%2F%2Fhello.com&ignorecase=0&multiline=0&dotall=0&verbose=0
+        # We could use urllib if the need arises
+        website_pattern = "\A(http(s)?://)?[\w\$\-\_\.\+\!\*\'\(\)\,]+\.\w{2,3}\Z"
+        if re.search(website_pattern, site):
+            self.__baseUrl = site
+        else:
+            self.__baseUrl = "https://"+site+".atlassian.net"
 
     def __buildBoardHash(self):
         """
