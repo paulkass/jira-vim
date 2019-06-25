@@ -12,7 +12,7 @@ created this: an attempt at de-bloating Jira by getting rid of the UI and using
 the standard Vim environment that we know and love to display data that we
 obtain from the API. 
 
-![Demo](https://imgur.com/a/acbmwUl)
+![Demo](https://i.imgur.com/FKkAOqu.gif)
 
 ## Current Status: Collecting Feedback for Beta!!
 
