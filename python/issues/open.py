@@ -26,13 +26,16 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
 
         sessionStorage.assignIssue(issue, buf)
 
+        ##### DRAW THE HEADER
         line = DrawUtil.draw_header(buf, issue, "%s %s" % (issueKey, project)) + 2
         buf.append(issue_type, 2)
 
+        ##### DRAW BASIC INFORMATION
         basic_info_category = ("Basic Information", [(field.title(), issue.getField(field)) for field in issue.basicInfo])
         line = DrawUtil.draw_category(buf, issue, basic_info_category, line=line, str_generator=': '.join) + 1
         buf.append("")
 
+        ##### DRAW DISPLAY FIELDS
         def formatter(startLine, endLine, *args):
             vim.command("normal! %dG" % startLine)
             vim.command("normal! %dgqq" % (endLine - startLine + 1))
@@ -43,8 +46,10 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
             line = DrawUtil.draw_category(buf, issue, c, line=line, formatter=formatter, str_generator=''.join) + 1
             buf.append("")
 
+        ##### DRAW COMMENTS
         comments = issue.getComments()
-        # This is just a very long way of formatting each comment as <author> <date>: <body>
+        # This is just a very long way of telling the computer to format each comment as <author> <date>: <body>
+        # The %c in strftime is to format the date in a human readable way
         comments = ("Comments", [(str(c.author) + "[" + str(c.author.name) + "] " + datetime.strptime(c.created, "%Y-%m-%dT%H:%M:%S.%f%z").strftime("%c"), c.body) for c in comments])
 
         def comment_formatter(startLine, endLine, *args):
