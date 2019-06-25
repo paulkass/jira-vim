@@ -12,9 +12,9 @@ created this: an attempt at de-bloating Jira by getting rid of the UI and using
 the standard Vim environment that we know and love to display data that we
 obtain from the API. 
 
-## Current Status: Preparing for the Alpha release!!
+## Current Status: Collecting Feedback for Beta!!
 
-Now that the basics are down, it's time to clean up for the alpha release. That means prettyfying things, simplifying stuff that can be automated fairly easily, and adding more information to places that were previously stubs or placeholders. You can view my progress on this [milestone](https://github.com/paulkass/jira-vim/milestone/1).
+Yes, the alpha is now out!! Now that there is something out there, now more than ever, I'm looking for feedback on what works for people. I tried to think of ways I could make this extensible and easy to contribute to, but I adapted it to my own coding style and preferences. But this might not work for everybody! So if you any ways of improving, please send me an email or open an issue. Even better if you submit a PR to fix or improve this project. One brain is good, but two is better!
 
 ## Installation
 
