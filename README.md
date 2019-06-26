@@ -1,6 +1,8 @@
 # jira-vim
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5d3c5f54a99b44688ea474d3b0a3fba7)](https://app.codacy.com/app/paul.kassianik/jira-vim?utm_source=github.com&utm_medium=referral&utm_content=paulkass/jira-vim&utm_campaign=Badge_Grade_Settings)
+[![Build Status](https://travis-ci.org/paulkass/jira-vim.svg?branch=master)](https://travis-ci.org/paulkass/jira-vim)
+[![License](https://img.shields.io/github/license/paulkass/jira-vim.svg)](./LICENSE)
 
 Jira-vim is a way to view your JIRA setup without the bloat of the JIRA UI.
 
@@ -12,7 +14,10 @@ created this: an attempt at de-bloating Jira by getting rid of the UI and using
 the standard Vim environment that we know and love to display data that we
 obtain from the API. 
 
-![Demo](https://i.imgur.com/FKkAOqu.gif)
+<p align="center">
+  <img src="https://cdn.jsdelivr.net/gh/paulkass/jira-vim/jiravim.svg">
+</p>
+
 
 ## Current Status: Collecting Feedback for Beta!!
 
@@ -58,3 +63,12 @@ I will try to do my best to be as backward compatible as possible moving forward
 
 If you do indeed try this plugin, please please please leave some feedback. I'm not the most experienced programmer, so if you have **any** comment or suggestion, either open an issue or send me an email at leonardthesalmon@protonmail.com. I will read all of your feedback (I promise).
 
+## Contributing
+
+Please read the [Contributor Guidelines](./CONTRIBUTING.md)
+.
+## ❤️❤️❤️ If you like this ...
+
+Please consider giving it a rating at [https://www.vim.org/scripts/script.php?script_id=5800](https://www.vim.org/scripts/script.php?script_id=5800)
+
+And please consider contributing to the project
