@@ -38,7 +38,6 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
         buf.append("")
 
         ##### DRAW DISPLAY FIELDS
-
         categories = [(field.title(), [("", issue.getField(field))]) for field in issue.displayFields]
         for c in categories:
             line = DrawUtil.draw_category(buf, issue, c, line=line, formatter=Formatters.DISPLAY_FIELDS_FORMATTER, str_generator=''.join) + 1
@@ -46,12 +45,12 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
 
         ##### DRAW COMMENTS
         comments = issue.getComments()
+        comments = ("Comments", [(str(c.author) + "[" + str(c.author.name) + "] " + datetime.strptime(c.created, "%Y-%m-%dT%H:%M:%S.%f%z").strftime("%c"), c.body) for c in comments])
         # This is just a very long way of telling the computer to format each comment as <author> <date>: <body>
         # The %c in strftime is to format the date in a human readable way
-        comments = ("Comments", [(str(c.author) + "[" + str(c.author.name) + "] " + datetime.strptime(c.created, "%Y-%m-%dT%H:%M:%S.%f%z").strftime("%c"), c.body) for c in comments])
-
         comment_formatter = FormatterFactory.get_comment_formatter(len(comments[1]))
-        line = DrawUtil.draw_category(buf, issue, comments, line=line, formatter=comment_formatter, str_generator=": ".join)
+        line = DrawUtil.draw_category(buf, issue, comments, line=line, formatter=comment_formatter, str_generator=": ".join) + 1
+        buf.append("")
 
     vim.command("set nomodifiable")
     vim.command("normal! gg")
