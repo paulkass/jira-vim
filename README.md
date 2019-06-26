@@ -65,10 +65,18 @@ If you do indeed try this plugin, please please please leave some feedback. I'm 
 
 ## Contributing
 
-Please read the [Contributor Guidelines](./CONTRIBUTING.md)
-.
+Please read the [Contributor Guidelines](./CONTRIBUTING.md).
+
+### Testing
+
+The project uses the [vader.vim](https://github.com/junegunn/vader.vim) plugin for intergration testing. Run 
+
+    vim -Nc "Vader! test/*"
+ 
+from the project root directory. Each pull request is tested with Travis CI and Codacy as well.
+
 ## ❤️❤️❤️ If you like this ...
 
 Please consider giving it a rating at [https://www.vim.org/scripts/script.php?script_id=5800](https://www.vim.org/scripts/script.php?script_id=5800)
 
-And please consider contributing to the project
+And please consider contributing to the project.
