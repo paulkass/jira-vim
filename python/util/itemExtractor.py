@@ -110,3 +110,20 @@ class CustomRequestItemExtractor:
 
         return CustomRequestItemExtractor(board.connection, board.baseUrl+"/issue?fields=%s&jql=status IN (%s)", lambda: (','.join(board.requiredProperties), ','.join(['\'%s\'' % k for k, v in board.statusToColumn.items() if v == column])), batch_size)
 
+
+class JiraObjectItemExtractor:
+    """
+    This class is designed to be an iterator over issues presented by methods of the JIRA object
+    """
+
+    def __init__(self, connection, provider, batch_size=10):
+        self.connection = connection
+        self.jira = connection.getJiraObject()
+        self.start_at_marker = 0
+        self.batch_size = 10
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        pass
