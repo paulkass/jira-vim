@@ -1,5 +1,5 @@
 
-class ItemExtractor:
+class CustomRequestItemExtractor:
     """
     This class is designed to be an iterator that iterates over some items presented by Jira.
     """
@@ -88,9 +88,9 @@ class ItemExtractor:
     @staticmethod
     def create_column_issue_extractor(board, column, batch_size=10):
         """
-        Create an ItemExtractor that extracts only items from one column.
+        Create a CustomRequestItemExtractor that extracts only items from one column.
 
-        Create an ItemExtractor that creates an extractor only for statuses associated with a specific column of a board.
+        Create a CustomRequestItemExtractor that creates an extractor only for statuses associated with a specific column of a board.
 
         Parameters
         ----------
@@ -103,10 +103,10 @@ class ItemExtractor:
 
         Returns
         -------
-        ItemExtractor
-            ItemExtractor instance that gets issues from this particular column
+        CustomRequestItemExtractor
+            CustomRequestItemExtractor instance that gets issues from this particular column
 
         """
 
-        return ItemExtractor(board.connection, board.baseUrl+"/issue?fields=%s&jql=status IN (%s)", lambda: (','.join(board.requiredProperties), ','.join(['\'%s\'' % k for k, v in board.statusToColumn.items() if v == column])), batch_size)
+        return CustomRequestItemExtractor(board.connection, board.baseUrl+"/issue?fields=%s&jql=status IN (%s)", lambda: (','.join(board.requiredProperties), ','.join(['\'%s\'' % k for k, v in board.statusToColumn.items() if v == column])), batch_size)
 
