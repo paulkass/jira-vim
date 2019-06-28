@@ -19,9 +19,20 @@ obtain from the API.
 </p>
 
 
-## Current Status: Collecting Feedback for Beta!!
+## Current Status: Working on the beta version
 
-Yes, the alpha is now out!! Now that there is something out there, now more than ever, I'm looking for feedback on what works for people. I tried to think of ways I could make this extensible and easy to contribute to, but I adapted it to my own coding style and preferences. But this might not work for everybody! So if you any ways of improving, please send me an email or open an issue. Even better if you submit a PR to fix or improve this project. One brain is good, but two is better!
+Ahoy, I compiled a tentative checklist of the stuff that will need to be done for the beta release. This checklist is a subset of all the stuff that will be done for the beta, so all the stuff here *will* be done, but this isn't necessarily the exhaustive list of all the things that will be included in the beta release. This also only includes new features, but not any tech debt tasks or technical housekeeping. Here it is:
+
+- [ ] Search Functionality
+- [ ] Differentiate between various Issue types
+- [ ] Colored syntax highlights
+- [ ] View issues assigned to you
+- [ ] Update issue fields
+- [ ] Creating new issues
+
+If you have anything to suggest, please let me know!
+
+Also, it will take me a long time to go through each of these checkboxes one by one and make them, so if you have a feature that you particularly like, I encourage you to [contribute](#contributing).
 
 ## Installation
 
@@ -65,7 +76,9 @@ If you do indeed try this plugin, please please please leave some feedback. I'm 
 
 ## Contributing
 
-Please read the [Contributor Guidelines](./CONTRIBUTING.md).
+Jira is a huge project, and many people use different parts of it. Doing this alone, for me, is a huge task, so I appreciate any help that comes by! 
+
+(You still have to read this boring text first though 😞: [Contributor Guidelines](./CONTRIBUTING.md))
 
 ### Testing
 
