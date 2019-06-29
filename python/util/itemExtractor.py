@@ -111,19 +111,49 @@ class CustomRequestItemExtractor:
         return CustomRequestItemExtractor(board.connection, board.baseUrl+"/issue?fields=%s&jql=status IN (%s)", lambda: (','.join(board.requiredProperties), ','.join(['\'%s\'' % k for k, v in board.statusToColumn.items() if v == column])), batch_size)
 
 
-class JiraObjectItemExtractor:
+class ObjectItemExtractor:
     """
     This class is designed to be an iterator over issues presented by methods of the JIRA object
     """
 
-    def __init__(self, connection, provider, batch_size=10):
-        self.connection = connection
-        self.jira = connection.getJiraObject()
+    def __init__(self, connection, provider, cleaner, batch_size=10):
+        """
+        Initializes an item extractor from a function.
+
+        Unlike its counterpart above, this class is better suited to extract results from a JIRA object function. You specify the function, and then this will return an extractor of issues with that given function.
+
+        Parameters
+        ----------
+        provider : Lambda
+            The provider function is a function that takes two keyword arguments: startAt, and maxResults, and returns some result. This result is then piped to the cleaner.
+        cleaner : Lambda
+            The cleaner lambda is a function that accepts whatever is returned by the cleaner, and returns two things:
+                1. the new startAt
+                2. Number of items returned
+                3. the cleaned result of the item extraction.
+            The new startAt is saved, and the results are returned to the user.
+        batch_size : Integer (Optional)
+            This is an integer that specifies the batch_size, used mostly to specify the "maxResults" parameter of the provider function. Defaults to 10.
+
+        Returns
+        -------
+        Nothing
+
+        """
+
         self.start_at_marker = 0
+        self.provider = provider
+        self.cleaner = cleaner
         self.batch_size = 10
+        self.finished = False
 
     def __iter__(self):
         return self
 
     def __next__(self):
-        pass
+        if self.finished:
+            return []
+
+    def reset(self):
+        self.start_at_marker = 0
+        self.finished = False
