@@ -7,15 +7,15 @@ from ..util.drawUtil import DrawUtil
 def JiraVimSearchOpen(sessionStorage):
     query = str(sys.argv[0])
     connection = sessionStorage.connection
-    filetype = "jirasearchview"
 
     buf, new = sessionStorage.getBuff(objId="")
     vim.command("sbuffer "+str(buf.number))
     vim.command("set modifiable")
-    vim.command("setl filetype=%s" % filetype)
     if new:
         search = Search(query, connection)
-        issues = search.getBatchIssues()
         line = 0
-        line = DrawUtil.draw_category(buf, search, issues[0], line=line)
+        line = DrawUtil.draw_header(buf, search, "Search for \""+query+"\"") + 1
+        #line = DrawUtil.draw_category(buf, search, issues[0], line=line)
+        line = DrawUtil.draw_items(buf, search, sessionStorage, line=line)
     vim.command("set nomodifiable")
+    DrawUtil.set_filetype(search)

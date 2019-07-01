@@ -7,6 +7,7 @@ from ..common.scrumBoard import ScrumBoard
 from ..common.board import Board
 from ..common.sprint import Sprint
 from ..common.issue import Issue
+from ..common.search import Search
 
 
 class DrawUtil():
@@ -16,7 +17,8 @@ class DrawUtil():
         "scrum": ScrumBoard,
         "board": Board,
         "sprint": Sprint,
-        "issue": Issue
+        "issue": Issue,
+        "search": Search
         })
     RESERVED_KEYWORDS = ["default", "obj"]
 
@@ -85,7 +87,7 @@ class DrawUtil():
         postfix = DrawUtil.__type_selector(
             board="board",
             sprint="sprint",
-            issue="",
+            default="",
             obj=obj
             )
 
@@ -97,7 +99,7 @@ class DrawUtil():
                 )
 
         buf[0] = name + (" %s" % postfix)
-        buf.append("="*(len(name)+7))
+        buf.append("="*(len(name) + 1 + len(postfix)))
         buf.append("")
 
         formatting(text_width)
@@ -332,6 +334,8 @@ class DrawUtil():
                 scrum="jirascrumboardview",
                 sprint="jirasprintview",
                 board="jiraboardview",
+                issue="jiraissueview",
+                search="jirasearchview",
                 default="",
                 obj=obj
                 )
