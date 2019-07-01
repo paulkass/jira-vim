@@ -110,13 +110,12 @@ class CustomRequestItemExtractor:
 
         return CustomRequestItemExtractor(board.connection, board.baseUrl+"/issue?fields=%s&jql=status IN (%s)", lambda: (','.join(board.requiredProperties), ','.join(['\'%s\'' % k for k, v in board.statusToColumn.items() if v == column])), batch_size)
 
-
 class ObjectItemExtractor:
     """
     This class is designed to be an iterator over issues presented by methods of the JIRA object
     """
 
-    def __init__(self, connection, provider, cleaner, batch_size=10):
+    def __init__(self, provider, batch_size=10):
         """
         Initializes an item extractor from a function.
 
@@ -125,13 +124,7 @@ class ObjectItemExtractor:
         Parameters
         ----------
         provider : Lambda
-            The provider function is a function that takes two keyword arguments: startAt, and maxResults, and returns some result. This result is then piped to the cleaner.
-        cleaner : Lambda
-            The cleaner lambda is a function that accepts whatever is returned by the cleaner, and returns two things:
-                1. the new startAt
-                2. Number of items returned
-                3. the cleaned result of the item extraction.
-            The new startAt is saved, and the results are returned to the user.
+            The provider function is a function that takes two keyword arguments: startAt and maxResults. The result is a list of items (it must be an object such that passing it to the len() function should return the number of items).
         batch_size : Integer (Optional)
             This is an integer that specifies the batch_size, used mostly to specify the "maxResults" parameter of the provider function. Defaults to 10.
 
@@ -143,7 +136,6 @@ class ObjectItemExtractor:
 
         self.start_at_marker = 0
         self.provider = provider
-        self.cleaner = cleaner
         self.batch_size = 10
         self.finished = False
 
@@ -153,7 +145,36 @@ class ObjectItemExtractor:
     def __next__(self):
         if self.finished:
             return []
+        results = self.provider(self.start_at_marker, self.batch_size)
+        num_items = len(results)
+        if num_items < self.batch_size:
+            self.finished = True
+        self.start_at_marker += num_items
+        return results
 
     def reset(self):
         self.start_at_marker = 0
         self.finished = False
+
+    @staticmethod
+    def create_search_extractor(connection, query, batch_size=10):
+        """
+        Create a simple extractor for a search query.
+
+        This creates an ObjectItemExtractor from a connection and a search query. It usses the search_issues method of the JIRA object.
+
+        Parameters
+        ----------
+        connection : Connection
+            A connection object from which the JIRA object is extracted.
+        query : String
+            A search query. This is inputted into the search_issues method of the JIRA object.
+        batch_size : Integer (Optional)
+            Batch size for the issue extraction. Defaults to 10.
+
+        Returns
+        -------
+        ObjectItemExtractor
+        """
+        provider = lambda startAt, maxResults: connection.getJiraObject().search_issues(query, startAt=startAt, maxResults=maxResults)
+        return ObjectItemExtractor(provider, batch_size)

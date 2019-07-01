@@ -1,6 +1,6 @@
 
 function! <SID>JiraVimSearch(query)
-    let l:query = JiraVimTrimHelper(query)
+    let l:query = JiraVimTrimHelper(a:query)
     echom "Searching the query ..."
     call check#CheckStorageSession()
 
