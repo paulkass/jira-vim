@@ -12,8 +12,9 @@ class SessionObject():
 
         # Also cache board objects: this one maps buffer numbers to Board and Sprint objects
         self.__boardsHash = {}
-
         self.__sprintsHash = {}
+
+        self.__searchesHash = {}
 
     @staticmethod
     def getConnectionFromVars():
@@ -66,6 +67,10 @@ class SessionObject():
         """
         self.__sprintsHash[buff.number] = sprint
 
+    def assignSearch(self, search, buf):
+        self.__bufferHash[search.query_id] = buf
+        self.__searchesHash[buf.number] = search
+
     def assignIssue(self, issue, buff):
         self.__bufferHash[issue.issueId] = buff
         self.__namesToIds[issue.issueKey] = issue.issueId
@@ -96,7 +101,7 @@ class SessionObject():
             return buff if buff.valid else None
         return None
 
-    def getBoard(self, boardIdentifier, boardName=None):
+    def getBoard(self, buf, boardName=None):
         """
         Retrieve board object based on buffer number
 
@@ -119,13 +124,13 @@ class SessionObject():
         """
         create_new_object = self.connection.getBoard
 
-        if isinstance(boardIdentifier, int):
-            board = self.__boardsHash.get(boardIdentifier, create_new_object(boardName))
-            self.assignBoard(board, vim.buffers[boardIdentifier])
+        if isinstance(buf, int):
+            board = self.__boardsHash.get(buf, create_new_object(boardName))
+            self.assignBoard(board, vim.buffers[buf])
             return board
-        if boardIdentifier in vim.buffers:
-            board = self.__boardsHash.get(boardIdentifier.number, create_new_object(boardName))
-            self.assignBoard(board, boardIdentifier)
+        if buf in vim.buffers:
+            board = self.__boardsHash.get(buf.number, create_new_object(boardName))
+            self.assignBoard(board, buf)
             return board
         return None
 
@@ -144,6 +149,9 @@ class SessionObject():
         if sprint and isinstance(sprintIdentifier, int):
             self.assignSprint(sprint, vim.buffers[sprintIdentifier])
         return sprint
+
+    def getSearch(self, buf_number):
+        return self.__searchesHash[buf_number]
 
     def getBuff(self, objId=None, objName=None, createNew=True):
         """

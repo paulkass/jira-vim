@@ -11,7 +11,6 @@ from ..util.drawUtil import DrawUtil
 def JiraVimIssueOpen(sessionStorage, isSplit=False):
     issueKey = str(sys.argv[0])
     connection = sessionStorage.connection
-    filetype = "jiraissueview"
     # Carry on the board name from the previous buffer
 
     buf, new = sessionStorage.getBuff(objName=issueKey)
@@ -20,11 +19,11 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
     else:
         vim.command("buffer "+str(buf.number))
     vim.command("set modifiable")
-    vim.command("setl filetype=%s" % filetype)
     if new:
         issue = Issue(issueKey, connection)
         project = str(issue.getField("project"))
         issue_type = str(issue.getField("issuetype"))
+        DrawUtil.set_filetype(issue)
 
         sessionStorage.assignIssue(issue, buf)
 

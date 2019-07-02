@@ -1,0 +1,28 @@
+
+Execute (Open the search):
+  execute "JiraVimSearchOpen type=story"
+  /SEARCH RESULTS
+  let b:searchResultLine = line(".")
+  /MORE
+  let b:moreLine = line(".")
+  JiraVimLoadMore
+  sleep 2
+
+Then (Expect header to appear):
+  Assert getline(1) =~# "Search for \"type=story\"", "No header found"
+  Assert getline(2) ==# "=======================", "No underlining found"
+
+  Assert getline(b:searchResultLine) =~# "SEARCH RESULTS:", "No Search result section"
+  Assert getline(b:searchResultLine+1) ==# "---------------", "No underlining for search result section"
+  Assert getline(b:searchResultLine+2) =~# '\v^TEST\-\d+\s+.+$', "No results for search"
+
+  execute ":" . b:moreLine
+  Assert getline(".") =~# '\v^TEST-\d+\s+.+', "No more issues were loaded"
+
+  try 
+    /MORE
+    let b:newMoreLine = line(".")
+  catch /Pattern\ not\ found:\ MORE/
+    let b:newMoreLine = b:moreLine + 1
+  endtry
+  Assert b:newMoreLine > b:moreLine, "MORE line didn't move" 

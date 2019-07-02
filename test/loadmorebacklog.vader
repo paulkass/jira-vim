@@ -21,4 +21,3 @@ Then (Make sure that more issues load):
     let b:newMoreLine = b:moreLine + 1
   endtry
   Assert b:newMoreLine > b:moreLine, "MORE line didn't move" 
-  normal! gg

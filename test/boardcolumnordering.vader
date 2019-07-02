@@ -4,7 +4,7 @@ Execute (Open the test board):
 
 Then (Test Order):
   Assert getline(1) ==# "TEST board", "No header found" 
-  Assert getline(2) ==# "===========", "No underlining found"
+  Assert getline(2) ==# "==========", "No underlining found"
 
   /BACKLOG
   let b:backlogLine = line(".")
