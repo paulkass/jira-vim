@@ -4,7 +4,7 @@ import vim
 from ..util.drawUtil import DrawUtil
 
 def JiraVimLoadMore(sessionStorage):
-    category_name, more_line = tuple(sys.argv)
+    _, more_line = tuple(sys.argv)
 
     buf = vim.current.buffer
     vim.command("set modifiable")
