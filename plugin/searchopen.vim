@@ -9,3 +9,6 @@ function! <SID>JiraVimSearch(query)
 endfunction
 
 command -nargs=1 JiraVimSearchOpen call <SID>JiraVimSearch(<q-args>)
+
+command JiraVimSearchAssigned call <SID>JiraVimSearch("assignee=currentUser()")
+command -nargs=1 JiraVimSearchPriorityUnassigned call <SID>JiraVimSearch("assignee is empty and priority >= " . <q-args> . " order by priority desc")

@@ -224,6 +224,27 @@ Here is the list of commands that are available to the user:
     recommended to set a keybind for this command in the appropriate filetypes
     (see |jiravim-filetypes|).
 
+                                                  *jiravim-search* *JiraVimSearch*
+:JiraVimSearch {query}
+    Performs a search on issues with the JQL {query} and returns paginated
+    results. Use |JiraVimLoadMore| to load more issues.
+
+    This function can be used as is, or you can use convenience functions,
+    like |JiraVimSearchAssigned| and |JiraVimSearchPriorityUnassigned|. You
+    can also create your own functions, and submit them to the project :^)
+
+                              *jiravim-search-assigned* *JiraVimSearchAssigned*
+:JiraVimSearchAssigned
+    This is a convenience function for |JiraVimSearch| that gets all issues
+    from all projects that are currently assigned to the user. Later issues
+    get ranked first.
+
+         *jiravim-search-priorityunassigned* *JiraVimSearchPriorityUnassigned*
+:JiraVimSearchPriorityUnassigned {priority}
+    This is a convenience function for |JiraVimSearch| that gets all issues
+    that are unassigned and with a priority higher than {priority}. Higher
+    prioirty issues get ranked first. 
+
 ================================================================================
 FILETYPES                                                      *jiravim-filetypes*
 

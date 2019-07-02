@@ -98,8 +98,9 @@ class DrawUtil():
                 obj=obj
                 )
 
-        buf[0] = name + (" %s" % postfix)
-        buf.append("="*(len(name) + 1 + (len(postfix) if len(postfix) > 1 else -1)))
+        header_str = (name + (" %s" % postfix)).strip()
+        buf[0] = header_str
+        buf.append("="*len(header_str))
         buf.append("")
 
         formatting(text_width)
