@@ -23,14 +23,16 @@ obtain from the API.
 
 Ahoy, I compiled a tentative checklist of the stuff that will need to be done for the beta release. This checklist is a subset of all the stuff that will be done for the beta, so all the stuff here *will* be done, but this isn't necessarily the exhaustive list of all the things that will be included in the beta release. This also only includes new features, but not any tech debt tasks or technical housekeeping. Here it is:
 
-- [ ] Search Functionality
+- [x] Search Functionality
 - [ ] Differentiate between various Issue types
 - [ ] Colored syntax highlights
-- [ ] View issues assigned to you
+- [x] View issues assigned to you
 - [ ] Update issue fields
 - [ ] Creating new issues
 
-If you have anything to suggest, please let me know!
+If you have anything to suggest, please let me know! 
+
+You can also see what I'm working on right now by looking at [this github project](https://github.com/paulkass/jira-vim/projects/2).
 
 Also, it will take me a long time to go through each of these checkboxes one by one and make them, so if you have a feature that you particularly like, I encourage you to [contribute](#contributing).
 
