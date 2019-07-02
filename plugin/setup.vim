@@ -53,6 +53,7 @@ python3 import python.boards.open
 python3 import python.boards.more
 python3 import python.issues.open
 python3 import python.search.open
+python3 import python.search.more
 python3 import python.sprints.open
 python3 import python.sprints.more
 

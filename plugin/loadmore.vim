@@ -13,10 +13,12 @@ function! <SID>JiraVimLoadMore()
     execute ":" . l:moreline
     
     execute "python3 sys.argv = [\"" . l:categoryName . "\", " . l:moreline . "]"
-    if &filetype == "jirasprintview"
+    if &filetype ==# "jirasprintview"
         execute "python3 python.sprints.more.JiraVimLoadMore(sessionStorage)"
-    elseif &filetype == "jiraboardview" || &filetype == "jirakanbanboardview"
+    elseif &filetype ==# "jiraboardview" || &filetype ==# "jirakanbanboardview"
         execute "python3 python.boards.more.JiraVimLoadMore(sessionStorage)"
+    elseif &filetype ==# "jirasearchview"
+        execute "python3 python.search.more.JiraVimLoadMore(sessionStorage)"
     else
         throw "Not a valid target for loading more issues"
     endif

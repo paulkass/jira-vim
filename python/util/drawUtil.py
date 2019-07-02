@@ -99,7 +99,7 @@ class DrawUtil():
                 )
 
         buf[0] = name + (" %s" % postfix)
-        buf.append("="*(len(name) + 1 + len(postfix)))
+        buf.append("="*(len(name) + 1 + (len(postfix) if len(postfix) > 1 else -1)))
         buf.append("")
 
         formatting(text_width)
