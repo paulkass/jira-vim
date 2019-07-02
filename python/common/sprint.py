@@ -1,5 +1,5 @@
 from ..util.itemCategorizer import ItemCategorizer
-from ..util.itemExtractor import CustomRequestItemExtractor
+from ..util.itemExtractor import ObjectItemExtractor
 
 class Sprint():
     def __init__(self, sprintId, url, board, connection, state=None, name=None, startDate=None, endDate=None):
@@ -16,7 +16,7 @@ class Sprint():
 
         self.columnExtractors = {}
         for col in self.board.columns:
-            self.columnExtractors[col] = CustomRequestItemExtractor.create_column_issue_extractor(self.board, col)
+            self.columnExtractors[col] = ObjectItemExtractor.create_column_issue_extractor(self.board, col)
 
     def getIssues(self, column=None):
         """
@@ -43,5 +43,5 @@ class Sprint():
         returnIssues = []
         for c in columns:
             r = self.columnExtractors[c].__next__()
-            returnIssues += ItemCategorizer.issueCategorizer(r["issues"], self.board.statusToColumn, self.columnExtractors)
+            returnIssues += ItemCategorizer.issueCategorizer(r, self.board.statusToColumn, self.columnExtractors)
         return returnIssues

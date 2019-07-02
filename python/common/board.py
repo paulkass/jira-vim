@@ -1,5 +1,5 @@
 
-from ..util.itemExtractor import CustomRequestItemExtractor
+from ..util.itemExtractor import ObjectItemExtractor
 
 class Board:
     def __init__(self, boardId, boardName, connection):
@@ -25,7 +25,12 @@ class Board:
             for s in col["statuses"]:
                 self.statusToColumn[s["id"]] = cName
 
-        self.issueExtractor = CustomRequestItemExtractor(self.connection, self.baseUrl+"/issue?fields=%s", lambda: (','.join(self.requiredProperties),))
+        def all_issues_provider(startAt, maxResults):
+            vals = (','.join(self.requiredProperties), startAt, maxResults)
+            response = self.connection.customRequest(self.baseUrl+"/issue?fields=%s&startAt=%d&maxResults=%d" % vals)
+            return response["issues"]
+
+        self.issueExtractor = ObjectItemExtractor(all_issues_provider)
 
     def getIssues(self):
         """

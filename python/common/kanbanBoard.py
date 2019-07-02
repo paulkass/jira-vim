@@ -1,6 +1,6 @@
 from .board import Board
 from ..util.itemCategorizer import ItemCategorizer
-from ..util.itemExtractor import CustomRequestItemExtractor
+from ..util.itemExtractor import ObjectItemExtractor
 
 class KanbanBoard(Board):
     def __init__(self, boardId, boardName, connection):
@@ -8,7 +8,7 @@ class KanbanBoard(Board):
         self.columnExtractors = {}
 
         for col in self.columns:
-            self.columnExtractors[col] = CustomRequestItemExtractor.create_column_issue_extractor(self, col)
+            self.columnExtractors[col] = ObjectItemExtractor.create_column_issue_extractor(self, col)
 
     def getIssues(self, column=None):
         """
@@ -35,6 +35,6 @@ class KanbanBoard(Board):
         returnIssues = []
         for c in columns:
             r = self.columnExtractors[c].__next__()
-            returnIssues += ItemCategorizer.issueCategorizer(r["issues"], self.statusToColumn, self.columnExtractors)
+            returnIssues += ItemCategorizer.issueCategorizer(r, self.statusToColumn, self.columnExtractors)
         # Sort issues by Category
         return returnIssues
