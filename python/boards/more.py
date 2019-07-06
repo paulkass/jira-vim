@@ -14,7 +14,7 @@ def JiraVimLoadMore(sessionStorage):
     del buf[more_line-1]
     del buf[more_line-1]
 
-    board = sessionStorage.getBoard(buf.number)
+    board = sessionStorage.getObject(buf.number)
 
     for c in board.columns:
         if c.upper() == category_name:

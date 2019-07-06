@@ -1,4 +1,6 @@
 import vim
+from .board import Board
+from .sprint import Sprint
 from .connection import Connection
 
 class SessionObject():
@@ -7,7 +9,9 @@ class SessionObject():
 
         # When retrieving buffers, we need to make sure that the buffer is valid.
         # If the buffer is cleared or wiped, it will be marked invalid and we can't retrieve it again.
-        self.__bufferHash = {}
+        self.__obj_id_to_buffers = {}
+        self.__obj_aliases = {}
+        self.__buf_num_to_objects = {}
         self.__namesToIds = {}
 
         # Also cache board objects: this one maps buffer numbers to Board and Sprint objects
@@ -15,6 +19,7 @@ class SessionObject():
         self.__sprintsHash = {}
 
         self.__searchesHash = {}
+
 
     @staticmethod
     def getConnectionFromVars():
@@ -40,26 +45,71 @@ class SessionObject():
 
         return Connection(domainName, email, token)
 
-    def assignBoard(self, board, buff):
-        """
-        Assigns associations between a board and a buffer to the caches.
 
+    def assignObject(self, obj, buff, *aliases):
+        """
+        Stores an association from an object to a buffer and vice versa.
+        
+        Stores an association between an object to a buffer. This will allow retrieval of a buffer associated with an object and an object associated with a buffer (or buffer number). It will also allow aliases to exist, that would map certain objects to an object id, and those would be mappend to buffers and vice versa.
+        
         Parameters
         ----------
-        board : Board
-            Object to be associated with the buffer
-        buff : Vim Buffer
-            A vim buffer object to be associated with board
+        obj : Object
+            This is the object to be associated with the buffer.
+        buff : vim.Buffer
+            This is the buffer to be associated with the object.
+        aliases : Array
+            This is the array of objects (generally Strings) that will contain aliases for the object. Contains 0 or more elements.
 
         Returns
         -------
         Nothing
-
         """
 
-        self.__bufferHash[board.id] = buff
-        self.__namesToIds[board.boardName] = board.id
-        self.__boardsHash[buff.number] = board
+        aliases = list(aliases)
+
+        if isinstance(obj, Board):
+            aliases.append(obj.boardName)
+        if isinstance(obj, Sprint):
+            aliases.append(obj.sprintName)
+        self.__obj_id_to_buffers[id(obj)] = buff 
+        for a in aliases:
+            self.__obj_aliases[a] = obj
+        self.__buf_num_to_objects[buff.number] = obj
+
+    def getObject(self, buff, create_object=None):
+        """
+        Retrieves an object based on buffer.
+
+        Tries to retrieve an object from the buffer number. If the object is not found, it tries to create one and assign it to the buffer.
+        
+        Parameters
+        ----------
+        buff : Object
+            The buffer or buffer number of the buffer associated with the object.
+        create_object : Function (Optional)
+            This function is called if the object is not found in the hashes. If the function is None, the function returns none. Otherwise, if the object is not found in the hashes it assigns and returns the result of calling of this function (no arguments). Defaults to None.
+
+        Returns
+        -------
+        Object
+            Returns the object associated with the buffer or returns None if it doesn't exist.
+        """
+        if not create_object:
+            # Set it to be a dud function that returns None
+            create_object = lambda: None
+
+        if isinstance(buff, int):
+            obj = self.__buf_num_to_objects.get(buff, create_object())
+            if obj:
+                self.assignObject(obj, vim.buffers[buff])
+            return obj 
+        if buff in vim.buffers:
+            obj = self.__buf_num_to_objects.get(buff.number, create_object())
+            if obj:
+                self.assignObject(obj, buff)
+            return obj 
+        return None
 
     def assignSprint(self, sprint, buff):
         """
@@ -68,11 +118,11 @@ class SessionObject():
         self.__sprintsHash[buff.number] = sprint
 
     def assignSearch(self, search, buf):
-        self.__bufferHash[search.query_id] = buf
+        self.__obj_id_to_buffers[search.query_id] = buf
         self.__searchesHash[buf.number] = search
 
     def assignIssue(self, issue, buff):
-        self.__bufferHash[issue.issueId] = buff
+        self.__obj_id_to_buffers[issue.issueId] = buff
         self.__namesToIds[issue.issueKey] = issue.issueId
 
     def getBufferByIndex(self, key):
@@ -93,11 +143,11 @@ class SessionObject():
 
         """
 
-        if key in self.__bufferHash:
-            buff = self.__bufferHash[key]
+        if key in self.__obj_id_to_buffers:
+            buff = self.__obj_id_to_buffers[key]
             return buff if buff.valid else None
         if key in self.__namesToIds:
-            buff = self.__bufferHash[self.__namesToIds[key]]
+            buff = self.__obj_id_to_buffers[self.__namesToIds[key]]
             return buff if buff.valid else None
         return None
 

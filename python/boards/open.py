@@ -14,7 +14,7 @@ def JiraVimBoardOpen(sessionStorage, isSplit=True):
         vim.command("buffer "+str(buf.number))
     vim.command("set modifiable")
     if new:
-        board = sessionStorage.getBoard(buf.number, boardName=boardName)
+        board = sessionStorage.getObject(buf.number, lambda: sessionStorage.connection.getBoard(boardName)) 
         DrawUtil.draw_header(buf, board, boardName)
         DrawUtil.draw_items(buf, board, sessionStorage)
         DrawUtil.set_filetype(board)

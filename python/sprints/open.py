@@ -7,7 +7,7 @@ def JiraVimSprintOpen(sessionStorage, isSplit=True):
 
     boardBuffer = vim.current.buffer
 
-    board = sessionStorage.getBoard(boardBuffer.number)
+    board = sessionStorage.getObject(boardBuffer.number)
     buf, _ = sessionStorage.getBuff(objName=sprintName)
     if isSplit:
         vim.command("sbuffer "+str(buf.number))
@@ -15,10 +15,10 @@ def JiraVimSprintOpen(sessionStorage, isSplit=True):
         vim.command("buffer "+str(buf.number))
     vim.command("set modifiable")
 
-    sprint = sessionStorage.getSprint(sprintName)
+    sprint = sessionStorage.getObject(sprintName)
     if not sprint:
         sprint = board.getSprint(sprintName)
-        sessionStorage.assignSprint(sprint, buf)
+        sessionStorage.assignObject(sprint, buf)
     DrawUtil.draw_header(buf, sprint, sprintName)
     DrawUtil.draw_items(buf, sprint, sessionStorage)
     DrawUtil.set_filetype(sprint)

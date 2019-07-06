@@ -265,12 +265,12 @@ class DrawUtil():
                 )
 
         # Associate buffer with object in sessionStorage
-        addBoardFunc = sessionStorage.assignBoard
-        addSprintFunc = sessionStorage.assignSprint
+        #addSprintFunc = sessionStorage.assignSprint
+        addObjectFunc = sessionStorage.assignObject
         dudFunc = lambda a, b: b
         DrawUtil.__type_selector(
-            board=addBoardFunc,
-            sprint=addSprintFunc,
+            board=addObjectFunc,
+            sprint=addObjectFunc,
             default=dudFunc,
             obj=obj
             )(obj, buf)
