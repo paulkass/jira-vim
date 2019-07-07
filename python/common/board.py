@@ -27,7 +27,7 @@ class Board:
 
         def all_issues_provider(startAt, maxResults):
             vals = (','.join(self.requiredProperties), startAt, maxResults)
-            response = self.connection.customRequest(self.baseUrl+"/issue?fields=%s&startAt=%d&maxResults=%d" % vals)
+            response = self.connection.customRequest(self.baseUrl+"/issue?fields=%s&startAt=%d&maxResults=%d" % vals).json()
             return response["issues"]
 
         self.issueExtractor = ObjectItemExtractor(all_issues_provider)
@@ -50,4 +50,4 @@ class Board:
         """
 
         r = self.issueExtractor.__next__()
-        return [("All Issues", self.issueExtractor.finished, [(i["key"], "") for i in r["issues"]])]
+        return [("All Issues", not self.issueExtractor.finished, [(i["key"], "") for i in r])]
