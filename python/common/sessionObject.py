@@ -1,9 +1,11 @@
 import vim
 from .connection import Connection
+from ..util.objectStorage import ObjectStorageTrie
 
 class SessionObject():
     def __init__(self):
         self.connection = SessionObject.getConnectionFromVars()
+        self.objectStorage = ObjectStorageTrie(self.connection.getJiraObject())
 
         # When retrieving buffers, we need to make sure that the buffer is valid.
         # If the buffer is cleared or wiped, it will be marked invalid and we can't retrieve it again.

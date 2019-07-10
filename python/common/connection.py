@@ -13,7 +13,7 @@ class Connection:
         self.__constructUrl(name)
         self.__email = email
         self.__token = token
-        self.__jira = JIRA(options={"server": self.__baseUrl}, basic_auth=(self.__email, self.__token))
+        self.__jira = JIRA(options={"server": self.__baseUrl, "agile_rest_path": "agile"}, basic_auth=(self.__email, self.__token))
         self.__buildBoardHash()
 
     def __constructUrl(self, site):
