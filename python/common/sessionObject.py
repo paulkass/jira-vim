@@ -34,9 +34,9 @@ class SessionObject():
 
         """
 
-        domainName = vim.vars["jiraVimDomainName"].decode("utf-8")
-        email = vim.vars["jiraVimEmail"].decode("utf-8")
-        token = vim.vars["jiraVimToken"].decode("utf-8")
+        domainName = SessionObject.decodeString(vim.vars["jiraVimDomainName"])
+        email = SessionObject.decodeString(vim.vars["jiraVimEmail"])
+        token = SessionObject.decodeString(vim.vars["jiraVimToken"])
 
         return Connection(domainName, email, token)
 
@@ -194,4 +194,12 @@ class SessionObject():
         buf = vim.current.buffer
         vim.command("hide")
         return buf
+
+    @staticmethod
+    def decodeString(candidate): 
+        # Decodes the string in utf-8 only if in vim, neovim puts it in the default locale automatically
+        if isinstance(candidate, str):
+            return candidate
+        else:
+            return candidate.decode("utf-8")
 
