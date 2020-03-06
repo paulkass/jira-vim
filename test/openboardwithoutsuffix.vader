@@ -9,7 +9,7 @@ Then (Expect header to appear and the columns):
   Assert getline(2) ==# "=========", "No underlining found"
 
   " Find the TODO category
-  /TO\ DO
+  /ALL\ ISSUES
   Assert getline(".") =~# "ALL ISSUES:", "No To Do section"
   normal! j 
   Assert getline(".") ==# "-----------", "No underlining for To Do section"
