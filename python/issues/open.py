@@ -44,7 +44,7 @@ def JiraVimIssueOpen(sessionStorage, isSplit=False):
 
         ##### DRAW COMMENTS
         comments = issue.getComments()
-        comments = ("Comments", [(str(c.author) + "[" + str(c.author.name) + "] " + datetime.strptime(c.created, "%Y-%m-%dT%H:%M:%S.%f%z").strftime("%c"), c.body) for c in comments])
+        comments = ("Comments", [(str(c.author) + "[" + (str(c.author.name) if hasattr(c.author, "name") else str(c.author.accountId)) + "] " + datetime.strptime(c.created, "%Y-%m-%dT%H:%M:%S.%f%z").strftime("%c"), c.body) for c in comments])
         # This is just a very long way of telling the computer to format each comment as <author> <date>: <body>
         # The %c in strftime is to format the date in a human readable way
         comment_formatter = FormatterFactory.get_comment_formatter(len(comments[1]))

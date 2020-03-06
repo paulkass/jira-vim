@@ -1,11 +1,17 @@
 
+from jira.resources import Issue as JiraIssue
+
 class Issue:
     def __init__(self, issueKey, connection):
         self.connection = connection
         jira = self.connection.getJiraObject()
 
-        self.issueKey = issueKey
-        self.obj = jira.issue(issueKey)
+        if isinstance(issueKey, JiraIssue):
+            self.obj = issueKey
+            self.issueKey = self.obj.key
+        else:
+            self.obj = jira.issue(issueKey)
+            self.issueKey = issueKey
         self.fields = self.obj.fields
         self.issueId = self.obj.id
 
