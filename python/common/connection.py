@@ -62,7 +62,11 @@ class Connection:
         boardList = self.customRequest(reqStr).json()
         for v in boardList["values"]:
             # The board name in v comes as "<boardName> board"
-            bName = re.match(r"\A([\s\w]+)\sboard\Z", v["name"]).group(1)
+            matches = re.match(r"\A([\s\w]+)\s[Bb]oard\Z", v["name"])
+            if matches is None:
+                bName = v["name"]
+            else:
+                bName = matches.group(1)
             board_hash[bName] = v
         self.__board_conf_hash = board_hash
 
