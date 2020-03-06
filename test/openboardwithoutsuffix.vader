@@ -1,0 +1,19 @@
+" This test is to test for a board that doens't happen to have a "board" suffix.
+
+Execute (Open the special board):
+  JiraVimBoardOpen TES
+  sleep 2
+
+Then (Expect header to appear and the columns):
+  Assert getline(1) ==# "TES board", "No header found" 
+  Assert getline(2) ==# "=========", "No underlining found"
+
+  " Find the TODO category
+  /ALL\ ISSUES
+  Assert getline(".") =~# "ALL ISSUES:", "No To Do section"
+  normal! j 
+  Assert getline(".") ==# "-----------", "No underlining for To Do section"
+
+  " Make sure there is at least an issue properly formatted 
+  normal! j
+  Assert getline(".") =~# '\v^TES\-\d+\s*.*$', "No issue in To Do"

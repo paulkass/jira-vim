@@ -19,4 +19,4 @@ Then (Make sure that it's actually the TEST board):
 
   " Make sure there is at least an issue properly formatted 
   normal! j
-  Assert getline(".") =~# '\v^TEST\-\d+\s+.+$', "No issue in Backlog"
+  Assert getline(".") =~# '\v^TEST\-\d+\s*.*$', "No issue in Backlog"
