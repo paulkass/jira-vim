@@ -10,9 +10,9 @@ Then (Expect header to appear and the columns):
 
   " Find the TODO category
   /TO\ DO
-  Assert getline(".") =~# "TO DO:", "No To Do section"
+  Assert getline(".") =~# "ALL ISSUES:", "No To Do section"
   normal! j 
-  Assert getline(".") ==# "--------", "No underlining for To Do section"
+  Assert getline(".") ==# "-----------", "No underlining for To Do section"
 
   " Make sure there is at least an issue properly formatted 
   normal! j
