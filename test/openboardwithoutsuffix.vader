@@ -16,4 +16,4 @@ Then (Expect header to appear and the columns):
 
   " Make sure there is at least an issue properly formatted 
   normal! j
-  Assert getline(".") =~# '\v^TES\-\d+\s+.+$', "No issue in To Do"
+  Assert getline(".") =~# '\v^TES\-\d+\s*.*$', "No issue in To Do"
