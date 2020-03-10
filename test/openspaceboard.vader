@@ -6,7 +6,7 @@ Execute (Open the special board):
 
 Then (Expect header to appear and the columns):
   Assert getline(1) ==# "Space Jam board", "No header found" 
-  Assert getline(2) ==# "=========", "No underlining found"
+  Assert getline(2) ==# "===============", "No underlining found"
 
   " Find the TODO category
   /TO\ DO
