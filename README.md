@@ -2,6 +2,7 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5d3c5f54a99b44688ea474d3b0a3fba7)](https://app.codacy.com/app/paul.kassianik/jira-vim?utm_source=github.com&utm_medium=referral&utm_content=paulkass/jira-vim&utm_campaign=Badge_Grade_Settings)
 [![Build Status](https://travis-ci.org/paulkass/jira-vim.svg?branch=master)](https://travis-ci.org/paulkass/jira-vim)
+[![Gitter](https://badges.gitter.im/jira-vim/community.svg)](https://gitter.im/jira-vim/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![License](https://img.shields.io/github/license/paulkass/jira-vim.svg)](./LICENSE)
 
 Jira-vim is a way to view your JIRA setup without the bloat of the JIRA UI.
