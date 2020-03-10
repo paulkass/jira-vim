@@ -1,0 +1,19 @@
+" This test is to test opening of a board that has a space in the middle, in this case Space Jam
+
+Execute (Open the special board):
+  JiraVimBoardOpen Space Jam
+  sleep 2
+
+Then (Expect header to appear and the columns):
+  Assert getline(1) ==# "Space Jam board", "No header found" 
+  Assert getline(2) ==# "=========", "No underlining found"
+
+  " Find the TODO category
+  /TO\ DO
+  Assert getline(".") =~# "TO DO:", "No To Do section"
+  normal! j 
+  Assert getline(".") ==# "------", "No underlining for To Do section"
+
+  " Make sure there is at least an issue properly formatted 
+  normal! j
+  Assert getline(".") =~# '\v^TEST\-\d+\s*.*$', "No issue in To Do"

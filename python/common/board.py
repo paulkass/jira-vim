@@ -1,4 +1,6 @@
 
+import urllib
+
 from ..util.itemExtractor import ObjectItemExtractor
 
 class Board:
@@ -6,7 +8,7 @@ class Board:
         self.connection = connection
         self.id = boardId
         self.boardName = boardName
-        self.baseUrl = "/rest/agile/1.0/board/"+boardId
+        self.baseUrl = "/rest/agile/1.0/board/"+urllib.parse.quote(boardId)
         self.requiredProperties = ["key", "status", "summary"]
 
         self.boardConf = self.connection.customRequest(self.baseUrl+"/configuration").json()

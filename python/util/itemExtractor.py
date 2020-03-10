@@ -66,10 +66,15 @@ class ObjectItemExtractor:
         ObjectItemExtractor
         """
         def provider(startAt, maxResults=batch_size):
-            connection_string = board.baseUrl+"/issue?fields=%s&jql=status IN (%s)"
+            connection_string = board.baseUrl+"/issue?fields=%s"
             req_fields_list = ','.join(board.requiredProperties)
             req_status_list = ','.join(['\'%s\'' % k for k, v in board.statusToColumn.items() if v == column])
-            req_vars = (req_fields_list, req_status_list) + (startAt, maxResults)
+            req_vars = (req_fields_list,) + (startAt, maxResults)
+            if req_status_list:
+                connection_string += "&jql=status IN (%s)"
+                req_vars = list(req_vars)
+                req_vars.insert(1, req_status_list)
+                req_vars = tuple(req_vars)
             request_string = (connection_string + "&startAt=%d&maxResults=%d") % (req_vars)
 
             response = board.connection.customRequest(request_string).json()
