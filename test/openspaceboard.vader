@@ -1,4 +1,4 @@
-" This test is to test for a board that doens't happen to have a "board" suffix.
+" This test is to test opening of a board that has a space in the middle, in this case Space Jam
 
 Execute (Open the special board):
   JiraVimBoardOpen Space Jam
