@@ -81,7 +81,6 @@ class Connection:
             board_hash[bName] = v
         self.__board_conf_hash = board_hash
 
-
     def getBaseUrl(self):
         """
         Getter for the base url
