@@ -70,7 +70,6 @@ class Connection:
             lastPage = rawBoardList["isLast"]
             # keep requesting boards until all are returned
             reqStr = "%s?startAt=%s" % (initReq, str(rawBoardList["startAt"] + rawBoardList["maxResults"]))
-    
         for v in boardList:
             # The board name in v comes as "<boardName> board"
             matches = re.match(r"\A([\s\w]+)\s[Bb]oard\Z", v["name"])
