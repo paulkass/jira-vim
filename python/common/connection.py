@@ -58,9 +58,20 @@ class Connection:
         """
 
         board_hash = {}
-        reqStr = "/rest/agile/1.0/board"
-        boardList = self.customRequest(reqStr).json()
-        for v in boardList["values"]:
+        boardList = []
+        lastPage = False
+        initReq = "/rest/agile/1.0/board"
+        reqStr = initReq
+        while not lastPage:
+            rawBoardList = self.customRequest(reqStr).json()
+            # concat the existing lists with the new one
+            boardList = boardList + rawBoardList["values"]
+            # update last page with api resp
+            lastPage = rawBoardList["isLast"]
+            # keep requesting boards until all are returned
+            reqStr = "%s?startAt=%s" % (initReq, str(rawBoardList["startAt"] + rawBoardList["maxResults"]))
+    
+        for v in boardList:
             # The board name in v comes as "<boardName> board"
             matches = re.match(r"\A([\s\w]+)\s[Bb]oard\Z", v["name"])
             if matches is None:
@@ -69,6 +80,7 @@ class Connection:
                 bName = matches.group(1)
             board_hash[bName] = v
         self.__board_conf_hash = board_hash
+
 
     def getBaseUrl(self):
         """
