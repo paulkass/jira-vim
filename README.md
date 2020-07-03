@@ -46,14 +46,14 @@ With Pathogen, use:
 
 With Vim-Plug, use:
 
-    Plug 'paulkass/jira-vim'
+    Plug 'paulkass/jira-vim', { 'do': 'pip install -r requirements.txt' }
 
 
 ### Dependencies on Python
 
-Please compile Vim with python3 for this plugin to function properly.
+Compile Vim with python3 for this plugin to function properly.
 
-Then install the `requirements.txt` file with pip. Usually the command is 
+If you didn't use Plug, then install the `requirements.txt` file with pip. Usually the command is 
 
     pip install -r requirements.txt
 
