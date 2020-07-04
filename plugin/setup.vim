@@ -1,15 +1,21 @@
 
 let s:script_dir = expand("<sfile>:p:h") . "/"
-execute "python3 import sys"
-execute "python3 sys.path.append('" . s:script_dir . "../')"
 
 " Make sure that all the necessary parts are in place {{{
 if !has('python3')
     throw "No python3 function found. Read the jiravim-python3-compile help section for more information."
 endif
 
+execute "python3 import sys"
+execute "python3 sys.path.append('" . s:script_dir . "../')"
+
 " Check that all pip dependencies are installed
 python3 import python.util.pip_check
+let s:status = py3eval("python.util.pip_check.check()")
+if s:status == 1
+    " throw "Please consult the 'jiravim-pip-install' help tag for help on installing pip dependencies."
+    finish
+endif
 
 " Install Tabular submodule
 silent let s:gitOutput = system("git")
@@ -31,24 +37,13 @@ if !exists(":Tabularize")
     endif
 endif
 
-" Check that credential variables are set
-if !exists("g:jiraVimDomainName")
-    throw "Please set 'g:jiraVimDomainName'. Refer to the 'jiravim-credentials' help tag for more information."
-endif
-
-if !exists("g:jiraVimEmail")
-    throw "Please set 'g:jiraVimEmail'. Refer to the 'jiravim-credentials' help tag for more information."
-endif
-
-if !exists("g:jiraVimToken")
-    throw "Please set 'g:jiraVimToken'. Refer to the 'jiravim-credentials' help tag for more information."
-endif
 
 " }}}
 
 " Globally used python and vim functions/scripts {{{
 
 " Import all scripts with functions here
+python3 import jira
 python3 import python.boards.open
 python3 import python.boards.more
 python3 import python.issues.open
