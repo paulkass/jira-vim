@@ -28,7 +28,6 @@ def check():
             continue
         except (pkg_resources.DistributionNotFound, pkg_resources.VersionConflict) as e:
             print(e)
-            print("Please consult the 'jiravim-pip-install' help tag for help on installing pip dependencies")
             return 1
         except Exception as e:
             return 1
