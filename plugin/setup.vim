@@ -11,8 +11,7 @@ execute "python3 sys.path.append('" . s:script_dir . "../')"
 
 " Check that all pip dependencies are installed
 python3 import python.util.pip_check
-let s:status = py3eval("python.util.pip_check.check()")
-if s:status == 1
+if py3eval("python.util.pip_check.check()")
     " throw "Please consult the 'jiravim-pip-install' help tag for help on installing pip dependencies."
     finish
 endif
